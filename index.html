@@ -1,0 +1,667 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100d1c">
+<title>КАВЕРЗА — Игра для компании</title>
+<style>
+:root{--bg:#100d1c;--panel:#1e1831;--pink:#ff55a5;--purple:#a27aff;--blue:#54c8ff;--green:#55e6a5;--muted:#aaa0c6}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#35204f,var(--bg) 65%);color:#faf7ff;font-family:system-ui,-apple-system,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer;touch-action:manipulation}
+button:disabled{opacity:.5;cursor:not-allowed}
+.app{width:min(100% - 26px,720px);margin:auto;padding:22px 0 40px}
+header{text-align:center;margin-bottom:22px}
+.logo{font-size:clamp(40px,10vw,64px);font-weight:1000;letter-spacing:3px;background:linear-gradient(100deg,#fff,#ff63b4,#a78bff);color:transparent;background-clip:text}
+.subtitle{color:var(--muted);font-size:14px}
+.panel{background:#1e1831eF;border:1px solid #ffffff16;border-radius:22px;padding:20px;margin-bottom:15px;box-shadow:0 15px 40px #0003}
+h2{font-size:23px;margin:0 0 10px}
+h3{margin:0;font-size:17px}
+.muted{color:var(--muted);font-size:14px;line-height:1.5}
+.field{margin:18px 0}
+.field>label,.field-title{display:block;font-weight:750;font-size:14px;margin-bottom:8px}
+input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff25;background:#110d20;color:white}
+.row{display:flex;gap:10px;align-items:center}
+.row>*{flex:1;min-width:0}
+.btn{padding:14px 16px;border:0;border-radius:14px;font-weight:850;color:white;background:#302449;transition:transform .15s}
+.btn:active{transform:scale(.98)}
+.primary{background:linear-gradient(100deg,var(--pink),var(--purple));color:#190e28}
+.success{background:linear-gradient(100deg,var(--green),#a9f4c7);color:#10251b}
+.danger{background:#ff4f7540;border:1px solid #ff4f7550}
+.block{width:100%;margin-top:10px}
+.player-list{display:grid;gap:9px}
+.player-row{display:flex;gap:9px;align-items:center}
+.player-num{width:34px;height:34px;display:grid;place-items:center;background:#ffffff12;border-radius:10px;color:var(--muted);flex-shrink:0}
+.small{border:0;background:transparent;color:var(--blue);font-weight:800;padding:8px}
+.categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.category{display:flex;align-items:center;gap:8px;padding:12px;border-radius:13px;background:#ffffff08;border:1px solid #ffffff15;font-size:13px;font-weight:750}
+.category input{width:18px;height:18px;accent-color:var(--pink);flex-shrink:0}
+.category span{font-size:20px}
+.topbar{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}
+.pill{background:#ffffff10;border-radius:30px;padding:8px 12px;font-size:13px;font-weight:800}
+.player-card{text-align:center}
+.avatar{font-size:52px}
+.player-name{font-size:27px;font-weight:900;overflow-wrap:anywhere}
+.wheel-wrap{width:min(78vw,330px);margin:25px auto;position:relative}
+.pointer{position:absolute;z-index:3;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:29px solid white;filter:drop-shadow(0 3px 5px #0008)}
+.wheel{aspect-ratio:1;width:100%;position:relative;border:7px solid white;border-radius:50%;background:conic-gradient(from -30deg,#ff568d 0deg 60deg,#a56bff 60deg 120deg,#3fbbf5 120deg 180deg,#43d9a0 180deg 240deg,#ffbd4a 240deg 300deg,#f36bd5 300deg 360deg);box-shadow:0 0 0 6px #ffffff15,0 18px 45px #0005;transition:transform 3s cubic-bezier(.12,.72,.12,1)}
+.wheel-label{position:absolute;left:50%;top:50%;width:74px;margin-left:-37px;margin-top:-13px;text-align:center;color:#1a1030;font-size:11px;font-weight:1000;line-height:1.2;transform:rotate(var(--a)) translateY(-103px) rotate(calc(-1 * var(--a)))}
+.wheel-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:#171126;border:4px solid white;display:grid;place-items:center;font-size:25px}
+.challenge{text-align:center}
+.badge{display:inline-block;padding:9px 14px;border-radius:30px;background:#ffffff12;font-weight:850;font-size:13px}
+.task{font-size:clamp(22px,5.5vw,31px);font-weight:850;line-height:1.35;margin:22px 0;overflow-wrap:anywhere}
+.timer{font-size:42px;font-weight:950;color:var(--green);font-variant-numeric:tabular-nums}
+.timer.warning{color:var(--pink)}
+.track{height:7px;background:#ffffff12;border-radius:9px;overflow:hidden;margin:10px 0 20px}
+.fill{height:100%;width:100%;background:var(--green);transition:width .3s}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions .btn{padding:14px 6px}
+.score-list{display:grid;gap:8px;margin-top:15px}
+.score-row{display:flex;align-items:center;gap:10px;background:#ffffff08;border-radius:13px;padding:11px}
+.score-avatar{font-size:25px}
+.score-name{flex:1;font-weight:800;overflow-wrap:anywhere}
+.score-value{font-size:20px;font-weight:950;color:var(--green)}
+.center{text-align:center}
+.result-icon{font-size:60px}
+.hidden{display:none!important}
+.footer{text-align:center;color:#756b8e;font-size:12px;margin-top:22px}
+.toast{position:fixed;z-index:10;bottom:20px;left:50%;transform:translateX(-50%);width:max-content;max-width:90%;padding:12px 17px;background:#302449;border:1px solid #ffffff25;border-radius:13px;box-shadow:0 8px 25px #0007;text-align:center}
+@media(min-width:560px){.categories{grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:24px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo">КАВЕРЗА</div>
+  <div class="subtitle">Игра для компании · Испытай удачу</div>
+</header>
+
+<main>
+<section id="setup">
+  <div class="panel">
+    <h2>🎮 Собирайте компанию</h2>
+    <p class="muted">Добавьте игроков, выберите категории и начинайте. Выполняйте задания и набирайте очки!</p>
+    <div class="field">
+      <div class="row">
+        <label class="field-title">Игроки (2–10)</label>
+        <button type="button" class="small" id="addPlayer">+ Добавить</button>
+      </div>
+      <div class="player-list" id="playerInputs"></div>
+    </div>
+    <div class="field">
+      <label class="field-title" for="rounds">Раундов на игрока</label>
+      <select id="rounds">
+        <option value="5">5 раундов</option>
+        <option value="7">7 раундов</option>
+        <option value="10" selected>10 раундов</option>
+        <option value="15">15 раундов</option>
+      </select>
+    </div>
+    <div class="field">
+      <div class="field-title">Категории испытаний</div>
+      <div class="categories" id="categoryChoices">
+        <label class="category"><input type="checkbox" value="question" checked><span>💬</span> Вопрос</label>
+        <label class="category"><input type="checkbox" value="action" checked><span>⚡</span> Действие</label>
+        <label class="category"><input type="checkbox" value="dare" checked><span>🔥</span> Вызов</label>
+        <label class="category"><input type="checkbox" value="reveal" checked><span>🤫</span> Откровение</label>
+        <label class="category"><input type="checkbox" value="twist" checked><span>🌀</span> Каверза</label>
+        <label class="category"><input type="checkbox" value="bonus" checked><span>⭐</span> Бонус</label>
+      </div>
+    </div>
+    <button class="btn primary block" id="start">НАЧАТЬ ИГРУ →</button>
+  </div>
+  <div class="panel">
+    <h3>📜 Правила</h3>
+    <p class="muted">Игроки ходят по очереди. Рулетка выбирает категорию испытания. Выполнил задание — получи очки. Пропустил — очки не начисляются. На выполнение даётся 60 секунд.</p>
+  </div>
+</section>
+
+<section id="game" class="hidden">
+  <div class="topbar">
+    <span class="pill" id="progress">Ход 1</span>
+    <span class="pill" id="currentScore">Очки: 0</span>
+  </div>
+  <div class="panel player-card">
+    <div class="avatar" id="avatar">😎</div>
+    <div class="muted">Сейчас ходит</div>
+    <div class="player-name" id="playerName">Игрок</div>
+    <div class="muted" id="turnInfo"></div>
+  </div>
+  <div class="panel center" id="wheelPanel">
+    <h2>🎯 Крути рулетку</h2>
+    <p class="muted">Случайная категория — новое испытание</p>
+    <div class="wheel-wrap">
+      <div class="pointer"></div>
+      <div class="wheel" id="wheel">
+        <span class="wheel-label" style="--a:0deg">💬<br>ВОПРОС</span>
+        <span class="wheel-label" style="--a:60deg">⚡<br>ДЕЙСТВИЕ</span>
+        <span class="wheel-label" style="--a:120deg">🔥<br>ВЫЗОВ</span>
+        <span class="wheel-label" style="--a:180deg">🤫<br>ОТКРОВЕНИЕ</span>
+        <span class="wheel-label" style="--a:240deg">🌀<br>КАВЕРЗА</span>
+        <span class="wheel-label" style="--a:300deg">⭐<br>БОНУС</span>
+        <div class="wheel-center">🎲</div>
+      </div>
+    </div>
+    <button class="btn primary block" id="spin">КРУТИТЬ РУЛЕТКУ</button>
+  </div>
+  <div class="panel challenge hidden" id="challenge">
+    <div class="badge" id="badge">💬 ВОПРОС</div>
+    <div class="task" id="task"></div>
+    <div id="timerArea">
+      <div class="timer" id="timer">60</div>
+      <div class="muted">секунд на выполнение</div>
+      <div class="track"><div class="fill" id="fill"></div></div>
+    </div>
+    <div class="actions">
+      <button class="btn success" id="done">✓ Выполнено</button>
+      <button class="btn danger" id="skip">✕ Пропустить</button>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>🏆 Таблица очков</h3>
+    <div class="score-list" id="scores"></div>
+  </div>
+  <button class="btn block" id="endGame">Завершить игру</button>
+</section>
+
+<section id="results" class="hidden">
+  <div class="panel center">
+    <div class="result-icon">🏆</div>
+    <h2>Игра окончена!</h2>
+    <p class="muted">Результаты вашей компании</p>
+    <div class="task" id="winner"></div>
+    <div class="score-list" id="finalScores"></div>
+    <button class="btn primary block" id="again">ИГРАТЬ СНОВА</button>
+    <button class="btn block" id="changeSettings">Изменить настройки</button>
+  </div>
+</section>
+</main>
+<div class="footer">КАВЕРЗА · Веселитесь и уважайте границы друг друга</div>
+</div>
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+const categories = {
+ question:{name:"ВОПРОС",emoji:"💬",points:1,tasks:[
+ "Какой самый нелепый поступок ты совершал?",
+ "Какую свою привычку ты хотел бы изменить?",
+ "Какое первое впечатление ты производишь на людей?",
+ "Какой самый странный сон ты помнишь?",
+ "Какой навык ты хотел бы освоить за один день?",
+ "Что может моментально поднять тебе настроение?",
+ "Какой самый спонтанный поступок ты совершал?",
+ "Какую песню ты знаешь наизусть, но стесняешься признаться?",
+ "Ты выберешь путешествие в прошлое или будущее?",
+ "Какой фильм ты готов пересматривать бесконечно?",
+ "Какая у тебя самая необычная способность?",
+ "Что ты никогда не попробуешь даже за миллион?",
+ "Какой совет ты дал бы себе пять лет назад?",
+ "Какая покупка оказалась самой бесполезной?",
+ "Что тебя смешит даже в плохом настроении?",
+ "С кем из известных людей ты хотел бы поговорить?",
+ "Какое блюдо ты готовишь лучше всего?",
+ "Что ты обычно откладываешь на потом?",
+ "Какое приключение ты хотел бы пережить?",
+ "Какая мелочь способна испортить тебе день?"
+ ]},
+ action:{name:"ДЕЙСТВИЕ",emoji:"⚡",points:2,tasks:[
+ "Изобрази робота, у которого заканчивается заряд.",
+ "Изобрази ведущего новостей о самом обычном событии.",
+ "Скажи алфавит как комментатор гонки.",
+ "Покажи без слов, как ты собираешься утром.",
+ "Изобрази кота, который требует еду.",
+ "Станцуй пять секунд без музыки.",
+ "Произнеси своё имя голосом супергероя.",
+ "Изобрази человека, впервые увидевшего снег.",
+ "Расскажи историю, используя три случайных слова.",
+ "Изобрази победу в чемпионате по сну.",
+ "Придумай рекламный слоган для обычной ложки.",
+ "Сделай три максимально пафосные позы.",
+ "Изобрази злодея из мультфильма.",
+ "Скажи скороговорку три раза подряд.",
+ "Покажи удивление без слов.",
+ "Прокомментируй поход к холодильнику как спортивный матч.",
+ "Придумай новое рукопожатие с игроком справа.",
+ "Изобрази человека, наступившего на невидимый кубик.",
+ "Придумай смешное прозвище самому себе.",
+ "Спой строчку песни голосом оперного певца."
+ ]},
+ dare:{name:"ВЫЗОВ",emoji:"🔥",points:3,tasks:[
+ "Не улыбайся 20 секунд, пока остальные тебя смешат.",
+ "Удержи равновесие на одной ноге 15 секунд.",
+ "Назови пять животных за пять секунд.",
+ "Назови семь городов за десять секунд.",
+ "Произнеси своё имя задом наперёд.",
+ "Сделай десять приседаний, если тебе комфортно.",
+ "Придумай мини-рэп из двух строк о компании.",
+ "Назови пять вещей на букву «К» за пять секунд.",
+ "Скажи три комплимента разным игрокам.",
+ "Объясни слово «пылесос», не называя его.",
+ "Изобрази три эмоции подряд без слов.",
+ "Придумай историю из трёх предложений за 15 секунд.",
+ "Назови пять фильмов за десять секунд.",
+ "Скажи скороговорку три раза подряд.",
+ "Придумай название музыкальной группы из присутствующих.",
+ "Продай воображаемый телефон.",
+ "Назови четыре круглых предмета за пять секунд.",
+ "Придумай смешной тост.",
+ "Изобрази вид спорта, чтобы остальные угадали.",
+ "Расскажи короткую историю с серьёзным лицом."
+ ]},
+ reveal:{name:"ОТКРОВЕНИЕ",emoji:"🤫",points:2,tasks:[
+ "Расскажи о своём самом смешном провале.",
+ "Какую мелочь ты обычно скрываешь от окружающих?",
+ "Какое у тебя было самое странное увлечение?",
+ "Какой комплимент ты запомнил надолго?",
+ "Что ты давно хотел попробовать, но пока не решился?",
+ "Какую детскую мечту ты помнишь до сих пор?",
+ "Какой навык окружающие недооценивают в тебе?",
+ "Какое событие заставило тебя гордиться собой?",
+ "Какой забавный факт о тебе мало кто знает?",
+ "Какой свой поступок ты считаешь особенно смелым?",
+ "Чему ты научился у человека, который тебя удивил?",
+ "Какая твоя привычка кажется другим необычной?",
+ "Что ты ценишь в дружбе больше всего?",
+ "Какое решение оказалось лучше, чем ты ожидал?",
+ "Какой момент ты хотел бы пережить ещё раз?",
+ "Какая твоя сильная сторона помогает в трудностях?",
+ "Что ты считаешь своим главным достижением?",
+ "Какой урок ты получил самым неожиданным способом?",
+ "Что ты хотел бы чаще делать в свободное время?",
+ "Какое качество ты больше всего ценишь в людях?"
+ ]},
+ twist:{name:"КАВЕРЗА",emoji:"🌀",points:3,tasks:[
+ "Следующий ответ произнеси голосом диктора.",
+ "Придумай новое название этой игре за десять секунд.",
+ "Объясни правила футбола инопланетянину.",
+ "Придумай суперспособность для игрока напротив.",
+ "Расскажи о своём дне как о трейлере боевика.",
+ "Придумай смешное название для этой компании.",
+ "Опиши холодильник, не называя его назначения.",
+ "Придумай новый праздник и объясни, как его отмечать.",
+ "Скажи любую фразу так, будто ты очень удивлён.",
+ "Придумай необычный закон для идеального мира.",
+ "Объясни назначение носков как учёный на конференции.",
+ "Сочини заголовок новости об этой игре.",
+ "Назови три применения пластиковой бутылки.",
+ "Объясни инопланетянину, что такое пицца.",
+ "Придумай имя и биографию супергерою.",
+ "Объясни телефон человеку из прошлого.",
+ "Продай билет на самое странное шоу.",
+ "Придумай правило, которое действует один раунд.",
+ "Опиши игрока как персонажа видеоигры.",
+ "Расскажи сказку, в которой главный герой — тапок."
+ ]},
+ bonus:{name:"БОНУС",emoji:"⭐",points:0,tasks:[
+ "Получи 2 дополнительных очка!",
+ "Получи 3 очка за пять названных любимых блюд.",
+ "Все игроки получают по одному очку.",
+ "Получи 2 очка и придумай себе игровой титул.",
+ "Получи 1 очко за честный ответ на вопрос компании.",
+ "Получи 2 очка за самую убедительную победную речь.",
+ "Получи 1 очко и назначь следующего игрока.",
+ "Получи 2 очка и придумай девиз компании.",
+ "Получи 3 очка за короткий анекдот.",
+ "Получи 2 очка, назвав пять фруктов за пять секунд.",
+ "Получи 1 очко за самый громкий победный возглас.",
+ "Выбери игрока: он получает 1 бонусное очко.",
+ "Получи 2 очка за комплимент каждому игроку.",
+ "Получи 1 очко за удачу!",
+ "Все игроки, кроме тебя, хлопают три раза — получи очко.",
+ "Получи 2 очка и выбери следующую категорию.",
+ "Выбери партнёра для испытания: оба получаете очко.",
+ "Получи 2 очка за смешное название команды.",
+ "Получи 1 очко и объяви себя капитаном на один раунд.",
+ "Получи 2 очка за самый оригинальный тост."
+ ]}
+};
+
+const categoryOrder = ["question","action","dare","reveal","twist","bonus"];
+const avatars = ["😎","🦊","🐼","🐸","🐯","🐙","🐺","🦄","🐲","👽"];
+
+const state = {
+ players:[],rounds:10,turn:0,turnsTaken:0,maxTurns:0,
+ enabled:[],used:{},category:null,task:null,angle:0,
+ spinning:false,active:false,timerId:null,seconds:60,started:false
+};
+let toastTimeout;
+
+function toast(message){
+ const el=$("#toast");
+ el.textContent=message;
+ el.classList.remove("hidden");
+ clearTimeout(toastTimeout);
+ toastTimeout=setTimeout(()=>el.classList.add("hidden"),2400);
+}
+
+function renderInputs(names){
+ const box=$("#playerInputs");
+ box.replaceChildren();
+ names.forEach((name,i)=>{
+  const row=document.createElement("div");
+  row.className="player-row";
+  const num=document.createElement("div");
+  num.className="player-num";
+  num.textContent=i+1;
+  const input=document.createElement("input");
+  input.maxLength=24;
+  input.autocomplete="off";
+  input.placeholder="Имя игрока "+(i+1);
+  input.setAttribute("aria-label",input.placeholder);
+  input.value=name;
+  row.append(num,input);
+  box.append(row);
+ });
+ $("#addPlayer").disabled=names.length>=10;
+}
+
+function selectedCategories(){
+ return $$("#categoryChoices input:checked").map(x=>x.value);
+}
+
+function startGame(){
+ const names=$$("#playerInputs input").map(x=>x.value.trim()).filter(Boolean);
+ if(names.length<2){toast("Введите имена минимум двух игроков");return;}
+ const enabled=selectedCategories();
+ if(!enabled.length){toast("Выберите хотя бы одну категорию");return;}
+
+ clearInterval(state.timerId);
+ state.players=names.map((name,i)=>({name,avatar:avatars[i%avatars.length],score:0,turns:0}));
+ state.rounds=Number($("#rounds").value)||10;
+ state.turn=0;
+ state.turnsTaken=0;
+ state.maxTurns=state.players.length*state.rounds;
+ state.enabled=enabled;
+ state.used={};
+ state.category=null;
+ state.task=null;
+ state.angle=0;
+ state.spinning=false;
+ state.active=false;
+ state.seconds=60;
+ state.started=true;
+
+ $("#wheel").style.transition="none";
+ $("#wheel").style.transform="rotate(0deg)";
+ $("#wheel").offsetHeight;
+ $("#wheel").style.transition="";
+
+ $("#setup").classList.add("hidden");
+ $("#results").classList.add("hidden");
+ $("#game").classList.remove("hidden");
+ $("#wheelPanel").classList.remove("hidden");
+ $("#challenge").classList.add("hidden");
+ $("#spin").disabled=false;
+ updateGame();
+ toast("Игра началась!");
+}
+
+function updateGame(){
+ const p=state.players[state.turn];
+ if(!p)return;
+ $("#avatar").textContent=p.avatar;
+ $("#playerName").textContent=p.name;
+ $("#progress").textContent=`Ход ${state.turnsTaken+1} из ${state.maxTurns}`;
+ $("#currentScore").textContent=`Очки: ${p.score}`;
+ $("#turnInfo").textContent=`Личный раунд ${p.turns+1} из ${state.rounds}`;
+
+ const sorted=[...state.players].sort((a,b)=>b.score-a.score);
+ const box=$("#scores");
+ box.replaceChildren();
+ sorted.forEach((player,i)=>{
+  const row=document.createElement("div");
+  row.className="score-row";
+  const av=document.createElement("span");
+  av.className="score-avatar";
+  av.textContent=player.avatar;
+  const name=document.createElement("span");
+  name.className="score-name";
+  name.textContent=`${i+1}. ${player.name}`;
+  const score=document.createElement("span");
+  score.className="score-value";
+  score.textContent=player.score;
+  row.append(av,name,score);
+  box.append(row);
+ });
+}
+
+function chooseTask(key){
+ const all=categories[key].tasks;
+ if(!state.used[key])state.used[key]=[];
+ let available=all.filter(t=>!state.used[key].includes(t));
+ if(!available.length){state.used[key]=[];available=[...all];}
+ const task=available[Math.floor(Math.random()*available.length)];
+ state.used[key].push(task);
+ return task;
+}
+
+function spin(){
+ if(state.spinning||state.active||!state.started)return;
+ state.spinning=true;
+ $("#spin").disabled=true;
+
+ const key=state.enabled[Math.floor(Math.random()*state.enabled.length)];
+ const index=categoryOrder.indexOf(key);
+
+ // Сектор выбранной категории точно совмещается с верхним указателем.
+ const target=((360-(index*60+30))%360+360)%360;
+ const current=((state.angle%360)+360)%360;
+ const delta=(target-current+360)%360;
+ state.angle+=1440+delta;
+ $("#wheel").style.transform=`rotate(${state.angle}deg)`;
+
+ setTimeout(()=>{
+  if(!state.started)return;
+  state.spinning=false;
+  state.category=key;
+  state.task=chooseTask(key);
+  showChallenge();
+ },3150);
+}
+
+function showChallenge(){
+ const cat=categories[state.category];
+ $("#wheelPanel").classList.add("hidden");
+ $("#challenge").classList.remove("hidden");
+ $("#badge").textContent=`${cat.emoji} ${cat.name}`;
+ $("#task").textContent=state.task;
+ $("#done").disabled=false;
+ $("#skip").disabled=false;
+ state.active=true;
+ state.seconds=60;
+ updateTimer();
+ clearInterval(state.timerId);
+ state.timerId=setInterval(()=>{
+  state.seconds--;
+  updateTimer();
+  if(state.seconds<=0){
+   clearInterval(state.timerId);
+   state.timerId=null;
+   finishTurn(false,true);
+  }
+ },1000);
+}
+
+function updateTimer(){
+ $("#timer").textContent=Math.max(0,state.seconds);
+ $("#timer").classList.toggle("warning",state.seconds<=10);
+ $("#fill").style.width=Math.max(0,state.seconds/60*100)+"%";
+ $("#fill").style.background=state.seconds<=10?"var(--pink)":"var(--green)";
+}
+
+function bonusPoints(task){
+ const p=state.players[state.turn];
+
+ if(task.startsWith("Все игроки получают")){
+  state.players.forEach(x=>x.score++);
+  return "Все игроки получили по очку!";
+ }
+
+ const match=task.match(/Получи (\d+) (?:дополнительных )?очк/);
+ if(match){
+  const points=Number(match[1]);
+  p.score+=points;
+  return `${p.name} получает ${points} очк.`;
+ }
+
+ if(task.startsWith("Выбери игрока")){
+  const others=state.players.filter(x=>x!==p);
+  if(others.length){
+   const chosen=others[Math.floor(Math.random()*others.length)];
+   chosen.score++;
+   return `${chosen.name} получает бонусное очко!`;
+  }
+ }
+
+ if(task.startsWith("Выбери партнёра")){
+  const others=state.players.filter(x=>x!==p);
+  p.score++;
+  if(others.length)others[Math.floor(Math.random()*others.length)].score++;
+  return "Участники получили по очку!";
+ }
+
+ if(task.includes("назначь следующего игрока")||task.includes("капитаном")){
+  p.score++;
+  return `${p.name} получает очко!`;
+ }
+
+ if(task.includes("Все игроки, кроме тебя")){
+  p.score++;
+  return `${p.name} получает очко!`;
+ }
+
+ p.score++;
+ return `${p.name} получает бонусное очко!`;
+}
+
+function finishTurn(completed,timedOut=false){
+ if(!state.active)return;
+ clearInterval(state.timerId);
+ state.timerId=null;
+ state.active=false;
+
+ const p=state.players[state.turn];
+ let message;
+
+ if(completed){
+  if(state.category==="bonus"){
+   message=bonusPoints(state.task);
+  }else{
+   const points=categories[state.category].points;
+   p.score+=points;
+   message=`${p.name} получает ${points} очк.`;
+  }
+ }else{
+  message=timedOut?"Время вышло — ход пропущен.":"Испытание пропущено. Очки не начислены.";
+ }
+
+ p.turns++;
+ state.turnsTaken++;
+
+ $("#challenge").classList.add("hidden");
+ $("#wheelPanel").classList.remove("hidden");
+
+ if(state.turnsTaken>=state.maxTurns){
+  updateGame();
+  toast(message);
+  setTimeout(showResults,600);
+  return;
+ }
+
+ state.turn=(state.turn+1)%state.players.length;
+ updateGame();
+ $("#spin").disabled=false;
+ toast(message);
+}
+
+function showResults(){
+ clearInterval(state.timerId);
+ state.timerId=null;
+ state.started=false;
+ state.active=false;
+ state.spinning=false;
+
+ $("#game").classList.add("hidden");
+ $("#setup").classList.add("hidden");
+ $("#results").classList.remove("hidden");
+
+ const sorted=[...state.players].sort((a,b)=>b.score-a.score);
+ const top=sorted[0].score;
+ const winners=sorted.filter(p=>p.score===top);
+ $("#winner").textContent=winners.length>1
+  ?`🤝 Ничья: ${winners.map(p=>p.name).join(", ")}!`
+  :`👑 Победитель — ${winners[0].name}!`;
+
+ const box=$("#finalScores");
+ box.replaceChildren();
+ sorted.forEach((p,i)=>{
+  const row=document.createElement("div");
+  row.className="score-row";
+  const av=document.createElement("span");
+  av.className="score-avatar";
+  av.textContent=p.avatar;
+  const name=document.createElement("span");
+  name.className="score-name";
+  name.textContent=`${i+1}. ${p.name}`;
+  const score=document.createElement("span");
+  score.className="score-value";
+  score.textContent=`${p.score} ★`;
+  row.append(av,name,score);
+  box.append(row);
+ });
+}
+
+$("#addPlayer").addEventListener("click",()=>{
+ const names=$$("#playerInputs input").map(x=>x.value);
+ if(names.length>=10)return;
+ names.push("");
+ renderInputs(names);
+ const inputs=$$("#playerInputs input");
+ inputs[inputs.length-1].focus();
+});
+
+$("#start").addEventListener("click",startGame);
+$("#spin").addEventListener("click",spin);
+$("#done").addEventListener("click",()=>finishTurn(true));
+$("#skip").addEventListener("click",()=>finishTurn(false));
+
+$("#endGame").addEventListener("click",()=>{
+ if(!state.started)return;
+ if(confirm("Завершить игру и показать текущие результаты?")){
+  clearInterval(state.timerId);
+  state.timerId=null;
+  state.active=false;
+  showResults();
+ }
+});
+
+$("#again").addEventListener("click",()=>{
+ const names=state.players.map(p=>p.name);
+ renderInputs(names);
+ startGame();
+});
+
+$("#changeSettings").addEventListener("click",()=>{
+ clearInterval(state.timerId);
+ state.timerId=null;
+ state.started=false;
+ state.active=false;
+ state.spinning=false;
+ $("#game").classList.add("hidden");
+ $("#results").classList.add("hidden");
+ $("#setup").classList.remove("hidden");
+});
+
+renderInputs(["Игрок 1","Игрок 2"]);
+</script>
+</body>
+</html>
