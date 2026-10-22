@@ -3,120 +3,610 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#100d1c">
-<title>КАВЕРЗА — Игра для компании</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0b19">
+<title>КАВЕРЗА — После полуночи</title>
+
 <style>
-:root{--bg:#100d1c;--panel:#1e1831;--pink:#ff55a5;--purple:#a27aff;--blue:#54c8ff;--green:#55e6a5;--muted:#aaa0c6}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#35204f,var(--bg) 65%);color:#faf7ff;font-family:system-ui,-apple-system,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer;touch-action:manipulation}
-button:disabled{opacity:.5;cursor:not-allowed}
-.app{width:min(100% - 26px,720px);margin:auto;padding:22px 0 40px}
-header{text-align:center;margin-bottom:22px}
-.logo{font-size:clamp(40px,10vw,64px);font-weight:1000;letter-spacing:3px;background:linear-gradient(100deg,#fff,#ff63b4,#a78bff);color:transparent;background-clip:text}
-.subtitle{color:var(--muted);font-size:14px}
-.panel{background:#1e1831eF;border:1px solid #ffffff16;border-radius:22px;padding:20px;margin-bottom:15px;box-shadow:0 15px 40px #0003}
-h2{font-size:23px;margin:0 0 10px}
-h3{margin:0;font-size:17px}
-.muted{color:var(--muted);font-size:14px;line-height:1.5}
-.field{margin:18px 0}
-.field>label,.field-title{display:block;font-weight:750;font-size:14px;margin-bottom:8px}
-input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff25;background:#110d20;color:white}
-.row{display:flex;gap:10px;align-items:center}
-.row>*{flex:1;min-width:0}
-.btn{padding:14px 16px;border:0;border-radius:14px;font-weight:850;color:white;background:#302449;transition:transform .15s}
-.btn:active{transform:scale(.98)}
-.primary{background:linear-gradient(100deg,var(--pink),var(--purple));color:#190e28}
-.success{background:linear-gradient(100deg,var(--green),#a9f4c7);color:#10251b}
-.danger{background:#ff4f7540;border:1px solid #ff4f7550}
-.block{width:100%;margin-top:10px}
-.player-list{display:grid;gap:9px}
-.player-row{display:flex;gap:9px;align-items:center}
-.player-num{width:34px;height:34px;display:grid;place-items:center;background:#ffffff12;border-radius:10px;color:var(--muted);flex-shrink:0}
-.small{border:0;background:transparent;color:var(--blue);font-weight:800;padding:8px}
-.categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-.category{display:flex;align-items:center;gap:8px;padding:12px;border-radius:13px;background:#ffffff08;border:1px solid #ffffff15;font-size:13px;font-weight:750}
-.category input{width:18px;height:18px;accent-color:var(--pink);flex-shrink:0}
-.category span{font-size:20px}
-.topbar{display:flex;justify-content:space-between;gap:10px;margin-bottom:14px}
-.pill{background:#ffffff10;border-radius:30px;padding:8px 12px;font-size:13px;font-weight:800}
-.player-card{text-align:center}
-.avatar{font-size:52px}
-.player-name{font-size:27px;font-weight:900;overflow-wrap:anywhere}
-.wheel-wrap{width:min(78vw,330px);margin:25px auto;position:relative}
-.pointer{position:absolute;z-index:3;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:29px solid white;filter:drop-shadow(0 3px 5px #0008)}
-.wheel{aspect-ratio:1;width:100%;position:relative;border:7px solid white;border-radius:50%;background:conic-gradient(from -30deg,#ff568d 0deg 60deg,#a56bff 60deg 120deg,#3fbbf5 120deg 180deg,#43d9a0 180deg 240deg,#ffbd4a 240deg 300deg,#f36bd5 300deg 360deg);box-shadow:0 0 0 6px #ffffff15,0 18px 45px #0005;transition:transform 3s cubic-bezier(.12,.72,.12,1)}
-.wheel-label{position:absolute;left:50%;top:50%;width:74px;margin-left:-37px;margin-top:-13px;text-align:center;color:#1a1030;font-size:11px;font-weight:1000;line-height:1.2;transform:rotate(var(--a)) translateY(-103px) rotate(calc(-1 * var(--a)))}
-.wheel-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:#171126;border:4px solid white;display:grid;place-items:center;font-size:25px}
-.challenge{text-align:center}
-.badge{display:inline-block;padding:9px 14px;border-radius:30px;background:#ffffff12;font-weight:850;font-size:13px}
-.task{font-size:clamp(22px,5.5vw,31px);font-weight:850;line-height:1.35;margin:22px 0;overflow-wrap:anywhere}
-.timer{font-size:42px;font-weight:950;color:var(--green);font-variant-numeric:tabular-nums}
-.timer.warning{color:var(--pink)}
-.track{height:7px;background:#ffffff12;border-radius:9px;overflow:hidden;margin:10px 0 20px}
-.fill{height:100%;width:100%;background:var(--green);transition:width .3s}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.actions .btn{padding:14px 6px}
-.score-list{display:grid;gap:8px;margin-top:15px}
-.score-row{display:flex;align-items:center;gap:10px;background:#ffffff08;border-radius:13px;padding:11px}
-.score-avatar{font-size:25px}
-.score-name{flex:1;font-weight:800;overflow-wrap:anywhere}
-.score-value{font-size:20px;font-weight:950;color:var(--green)}
-.center{text-align:center}
-.result-icon{font-size:60px}
-.hidden{display:none!important}
-.footer{text-align:center;color:#756b8e;font-size:12px;margin-top:22px}
-.toast{position:fixed;z-index:10;bottom:20px;left:50%;transform:translateX(-50%);width:max-content;max-width:90%;padding:12px 17px;background:#302449;border:1px solid #ffffff25;border-radius:13px;box-shadow:0 8px 25px #0007;text-align:center}
-@media(min-width:560px){.categories{grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:24px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+:root {
+  color-scheme: dark;
+  --bg: #0b0b19;
+  --panel: #19172b;
+  --edge: #ffffff1d;
+  --ink: #faf7ff;
+  --muted: #ada8c5;
+  --pink: #ff5aab;
+  --violet: #a78bfa;
+  --mint: #64e8c1;
+  --red: #ff7892;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse 75% 40% at 50% -5%, #5e255e88, transparent),
+    radial-gradient(ellipse 55% 40% at 100% 65%, #26246788, transparent),
+    var(--bg);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; touch-action: manipulation; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+
+.app {
+  width: min(100% - 28px, 760px);
+  margin: auto;
+  padding: 25px 0 max(40px, env(safe-area-inset-bottom));
+}
+
+header { text-align: center; margin: 8px 0 25px; }
+
+.eyebrow {
+  color: #e6a3cf;
+  font-size: 11px;
+  letter-spacing: .28em;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.logo {
+  font-size: clamp(52px,12vw,83px);
+  line-height: 1.04;
+  font-weight: 1000;
+  letter-spacing: -.06em;
+  background: linear-gradient(110deg,#fff 8%,#ff75b6 55%,#a58bff);
+  color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 8px 28px #fd51a12b);
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.panel {
+  background: linear-gradient(145deg,#23203bfa,#171527f7);
+  border: 1px solid var(--edge);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 14px;
+  box-shadow: 0 15px 40px #0003;
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 23px;
+  letter-spacing: -.035em;
+}
+
+h3 { margin: 0 0 8px; font-size: 17px; }
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.field { margin: 19px 0; }
+
+.field-title {
+  font-size: 13px;
+  font-weight: 850;
+  margin-bottom: 9px;
+  display: block;
+}
+
+.row { display: flex; gap: 10px; align-items: center; }
+.row > * { min-width: 0; }
+.row .grow { flex: 1; }
+
+input[type=text], select {
+  width: 100%;
+  background: #0f1020;
+  border: 1px solid #ffffff30;
+  border-radius: 13px;
+  padding: 12px;
+  color: white;
+  outline: none;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #c8aaff;
+  outline-offset: 3px;
+}
+
+.btn {
+  border: 1px solid #ffffff1a;
+  border-radius: 15px;
+  padding: 14px 15px;
+  background: #322b4c;
+  color: #fff;
+  font-weight: 850;
+  transition: transform .15s, filter .15s;
+}
+
+.btn:active { transform: scale(.98); }
+.btn:hover:not(:disabled) { filter: brightness(1.12); }
+
+.primary {
+  color: #180d25;
+  border: 0;
+  background: linear-gradient(105deg,#ff63b0,#aa88ff);
+}
+
+.success {
+  color: #10241f;
+  border: 0;
+  background: linear-gradient(105deg,#5ce4b9,#b6ffe0);
+}
+
+.danger {
+  background: #5a2944;
+  border-color: #e8779560;
+}
+
+.block { width: 100%; margin-top: 10px; }
+
+.small {
+  background: none;
+  border: 0;
+  color: #8edbff;
+  padding: 7px;
+  font-weight: 800;
+}
+
+.player-list { display: grid; gap: 9px; }
+
+.player-row { display: flex; align-items: center; gap: 8px; }
+
+.player-row input { flex: 1; min-width: 0; }
+
+.num {
+  display: grid;
+  place-items: center;
+  width: 33px;
+  height: 35px;
+  background: #ffffff11;
+  border-radius: 10px;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.remove {
+  border: 0;
+  background: #ffffff0b;
+  color: #ffc3d9;
+  border-radius: 9px;
+  padding: 9px 12px;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 9px;
+}
+
+.category {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid #ffffff1b;
+  background: #ffffff08;
+  border-radius: 14px;
+  padding: 12px 10px;
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.category:has(input:checked) {
+  border-color: #f88dd477;
+  background: #ff66b116;
+}
+
+.category input {
+  accent-color: var(--pink);
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.category b { font-size: 19px; }
+
+.levels {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 8px;
+}
+
+.level { position: relative; cursor: pointer; }
+.level input { position: absolute; opacity: 0; }
+
+.level span {
+  display: block;
+  text-align: center;
+  padding: 13px 5px;
+  border: 1px solid #ffffff20;
+  border-radius: 13px;
+  font-size: 12px;
+  font-weight: 850;
+  background: #ffffff08;
+}
+
+.level input:checked + span {
+  background: #ff5aab22;
+  border-color: #ff75ba;
+  color: #ffd2e7;
+}
+
+.level input:focus-visible + span {
+  outline: 3px solid #c8aaff;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 13px;
+}
+
+.pill {
+  padding: 9px 12px;
+  background: #ffffff13;
+  border: 1px solid #ffffff14;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.player-card { text-align: center; padding: 19px; }
+.avatar { font-size: 47px; }
+
+.player-name {
+  font-size: 29px;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.wheel-wrap {
+  width: min(79vw,340px);
+  margin: 25px auto;
+  position: relative;
+}
+
+.pointer {
+  position: absolute;
+  z-index: 5;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 29px solid #fff;
+  filter: drop-shadow(0 3px 5px #0009);
+}
+
+.wheel {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 8px solid #f7e8ff;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 0 6px #ffffff15,0 18px 50px #0007;
+  transition: transform 3.2s cubic-bezier(.11,.78,.12,1);
+  background: conic-gradient(
+    from -30deg,
+    #ff5e9d 0 60deg,
+    #ac79ff 60deg 120deg,
+    #53baf0 120deg 180deg,
+    #49d4b0 180deg 240deg,
+    #ffc061 240deg 300deg,
+    #e774dd 300deg 360deg
+  );
+}
+
+.wheel-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 82px;
+  margin-left: -41px;
+  margin-top: -13px;
+  color: #180d29;
+  font-weight: 1000;
+  font-size: 10px;
+  line-height: 1.2;
+  text-align: center;
+  transform:
+    rotate(var(--a))
+    translateY(-105px)
+    rotate(calc(-1 * var(--a)));
+}
+
+.wheel-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 65px;
+  height: 65px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #161326;
+  border: 4px solid white;
+  font-size: 26px;
+}
+
+.challenge { text-align: center; }
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 9px 14px;
+  background: #ffffff15;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.task {
+  font-size: clamp(23px,5.5vw,34px);
+  font-weight: 900;
+  line-height: 1.32;
+  margin: 25px 0;
+  overflow-wrap: anywhere;
+  letter-spacing: -.025em;
+}
+
+.task-meta {
+  color: #e7c8ef;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.timer {
+  font-size: 45px;
+  font-weight: 1000;
+  font-variant-numeric: tabular-nums;
+  color: var(--mint);
+}
+
+.timer.warning { color: var(--red); }
+
+.track {
+  height: 8px;
+  background: #ffffff15;
+  border-radius: 9px;
+  overflow: hidden;
+  margin: 10px 0 19px;
+}
+
+.fill {
+  height: 100%;
+  width: 100%;
+  background: var(--mint);
+  transition: width .2s linear;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.actions .btn { padding: 14px 5px; }
+
+.score-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 13px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff0a;
+  border: 1px solid #ffffff0c;
+  padding: 11px;
+  border-radius: 13px;
+}
+
+.score-name {
+  flex: 1;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.score-value {
+  color: var(--mint);
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.center { text-align: center; }
+.hidden { display: none !important; }
+
+.footer {
+  text-align: center;
+  color: #9289ad;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 20px;
+}
+
+.toast {
+  position: fixed;
+  bottom: max(18px,env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  background: #423155;
+  border: 1px solid #ffffff44;
+  border-radius: 14px;
+  padding: 13px 18px;
+  box-shadow: 0 15px 30px #0009;
+  text-align: center;
+  max-width: 92%;
+  width: max-content;
+  font-size: 14px;
+}
+
+.note {
+  border-left: 3px solid var(--pink);
+  padding: 8px 12px;
+  background: #ffffff09;
+  border-radius: 5px;
+  color: #c6bfd9;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.result-icon { font-size: 60px; }
+.confetti { font-size: 32px; letter-spacing: 6px; }
+
+@media(min-width:560px) {
+  .panel { padding: 25px; }
+  .categories {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
+  <div class="eyebrow">Игра для смелой компании</div>
   <div class="logo">КАВЕРЗА</div>
-  <div class="subtitle">Игра для компании · Испытай удачу</div>
+  <div class="subtitle">Неловко. Смешно. Ещё один раунд.</div>
 </header>
 
 <main>
+
 <section id="setup">
   <div class="panel">
-    <h2>🎮 Собирайте компанию</h2>
-    <p class="muted">Добавьте игроков, выберите категории и начинайте. Выполняйте задания и набирайте очки!</p>
+    <h2>😈 Кто сегодня рискует?</h2>
+    <p class="muted">
+      Соберите компанию, выберите градус неловкости
+      и вращайте рулетку. Никаких обязательных признаний.
+    </p>
+
     <div class="field">
       <div class="row">
-        <label class="field-title">Игроки (2–10)</label>
-        <button type="button" class="small" id="addPlayer">+ Добавить</button>
+        <span class="field-title grow">Игроки (2–10)</span>
+        <button class="small" id="addPlayer" type="button">
+          + Добавить
+        </button>
       </div>
       <div class="player-list" id="playerInputs"></div>
     </div>
+
     <div class="field">
-      <label class="field-title" for="rounds">Раундов на игрока</label>
+      <label class="field-title" for="rounds">
+        Раундов на игрока
+      </label>
       <select id="rounds">
-        <option value="5">5 раундов</option>
-        <option value="7">7 раундов</option>
-        <option value="10" selected>10 раундов</option>
-        <option value="15">15 раундов</option>
+        <option value="5">5 — быстрый разогрев</option>
+        <option value="7">7 — короткая вечеринка</option>
+        <option value="10" selected>10 — классика</option>
+        <option value="15">15 — марафон</option>
       </select>
     </div>
+
     <div class="field">
-      <div class="field-title">Категории испытаний</div>
+      <span class="field-title">Градус неловкости</span>
+      <div class="levels">
+        <label class="level">
+          <input type="radio" name="level" value="soft">
+          <span>🙂 Лайт</span>
+        </label>
+        <label class="level">
+          <input type="radio" name="level" value="bold" checked>
+          <span>😏 Смело</span>
+        </label>
+        <label class="level">
+          <input type="radio" name="level" value="spicy">
+          <span>🔥 Без фильтра 18+</span>
+        </label>
+      </div>
+      <p class="muted" style="margin:7px 0 0">
+        18+ — взрослые темы, флирт и неловкие признания
+        без принуждения.
+      </p>
+    </div>
+
+    <div class="field">
+      <span class="field-title">Категории</span>
       <div class="categories" id="categoryChoices">
-        <label class="category"><input type="checkbox" value="question" checked><span>💬</span> Вопрос</label>
-        <label class="category"><input type="checkbox" value="action" checked><span>⚡</span> Действие</label>
-        <label class="category"><input type="checkbox" value="dare" checked><span>🔥</span> Вызов</label>
-        <label class="category"><input type="checkbox" value="reveal" checked><span>🤫</span> Откровение</label>
-        <label class="category"><input type="checkbox" value="twist" checked><span>🌀</span> Каверза</label>
-        <label class="category"><input type="checkbox" value="bonus" checked><span>⭐</span> Бонус</label>
+        <label class="category">
+          <input type="checkbox" value="question" checked>
+          <b>💬</b> Вопрос
+        </label>
+        <label class="category">
+          <input type="checkbox" value="action" checked>
+          <b>⚡</b> Действие
+        </label>
+        <label class="category">
+          <input type="checkbox" value="dare" checked>
+          <b>🔥</b> Вызов
+        </label>
+        <label class="category">
+          <input type="checkbox" value="reveal" checked>
+          <b>🤫</b> Откровение
+        </label>
+        <label class="category">
+          <input type="checkbox" value="twist" checked>
+          <b>🌀</b> Каверза
+        </label>
+        <label class="category">
+          <input type="checkbox" value="bonus" checked>
+          <b>⭐</b> Бонус
+        </label>
       </div>
     </div>
-    <button class="btn primary block" id="start">НАЧАТЬ ИГРУ →</button>
+
+    <button class="btn primary block" id="start">
+      НАЧАТЬ ВЕЧЕРИНКУ →
+    </button>
   </div>
+
   <div class="panel">
-    <h3>📜 Правила</h3>
-    <p class="muted">Игроки ходят по очереди. Рулетка выбирает категорию испытания. Выполнил задание — получи очки. Пропустил — очки не начисляются. На выполнение даётся 60 секунд.</p>
+    <h3>📜 Правила без занудства</h3>
+    <p class="muted">
+      Каждый ход — случайная выбранная категория.
+      За выполнение начисляются очки.
+      Можно пропустить любой вопрос без объяснений и штрафа.
+      На задание — 60 секунд.
+      Побеждает тот, кто набрал больше очков.
+    </p>
+    <div class="note">
+      Не просите показывать личные переписки,
+      раскрывать чужие секреты или делать то,
+      на что человек не согласен.
+      Взрослый режим — только для компании 18+.
+    </div>
   </div>
 </section>
 
@@ -125,64 +615,95 @@ input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff
     <span class="pill" id="progress">Ход 1</span>
     <span class="pill" id="currentScore">Очки: 0</span>
   </div>
+
   <div class="panel player-card">
     <div class="avatar" id="avatar">😎</div>
-    <div class="muted">Сейчас ходит</div>
-    <div class="player-name" id="playerName">Игрок</div>
+    <div class="muted">В центре внимания</div>
+    <div class="player-name" id="playerName"></div>
     <div class="muted" id="turnInfo"></div>
   </div>
+
   <div class="panel center" id="wheelPanel">
-    <h2>🎯 Крути рулетку</h2>
-    <p class="muted">Случайная категория — новое испытание</p>
+    <h2>🎯 Рулетка решает</h2>
+    <p class="muted">Судьба уже приготовила вопрос...</p>
+
     <div class="wheel-wrap">
       <div class="pointer"></div>
       <div class="wheel" id="wheel">
-        <span class="wheel-label" style="--a:0deg">💬<br>ВОПРОС</span>
-        <span class="wheel-label" style="--a:60deg">⚡<br>ДЕЙСТВИЕ</span>
-        <span class="wheel-label" style="--a:120deg">🔥<br>ВЫЗОВ</span>
-        <span class="wheel-label" style="--a:180deg">🤫<br>ОТКРОВЕНИЕ</span>
-        <span class="wheel-label" style="--a:240deg">🌀<br>КАВЕРЗА</span>
-        <span class="wheel-label" style="--a:300deg">⭐<br>БОНУС</span>
-        <div class="wheel-center">🎲</div>
+        <div class="wheel-center">😈</div>
       </div>
     </div>
-    <button class="btn primary block" id="spin">КРУТИТЬ РУЛЕТКУ</button>
+
+    <button class="btn primary block" id="spin">
+      КРУТИТЬ РУЛЕТКУ
+    </button>
   </div>
+
   <div class="panel challenge hidden" id="challenge">
-    <div class="badge" id="badge">💬 ВОПРОС</div>
+    <div class="badge" id="badge"></div>
     <div class="task" id="task"></div>
+    <div class="task-meta" id="taskMeta"></div>
+
     <div id="timerArea">
       <div class="timer" id="timer">60</div>
-      <div class="muted">секунд на выполнение</div>
-      <div class="track"><div class="fill" id="fill"></div></div>
+      <div class="muted">секунд осталось</div>
+      <div class="track">
+        <div class="fill" id="fill"></div>
+      </div>
     </div>
+
     <div class="actions">
       <button class="btn success" id="done">✓ Выполнено</button>
       <button class="btn danger" id="skip">✕ Пропустить</button>
     </div>
+
+    <p class="muted">
+      Пас — это нормально. Никто не обязан отвечать.
+    </p>
   </div>
+
   <div class="panel">
-    <h3>🏆 Таблица очков</h3>
+    <h3>🏆 Турнирная таблица</h3>
     <div class="score-list" id="scores"></div>
   </div>
-  <button class="btn block" id="endGame">Завершить игру</button>
+
+  <button class="btn block" id="endGame">
+    Завершить игру
+  </button>
 </section>
 
 <section id="results" class="hidden">
   <div class="panel center">
-    <div class="result-icon">🏆</div>
-    <h2>Игра окончена!</h2>
-    <p class="muted">Результаты вашей компании</p>
+    <div class="confetti">✨🎉✨</div>
+    <h2>Вот это была вечеринка!</h2>
+    <p class="muted">Финальные результаты</p>
+
     <div class="task" id="winner"></div>
     <div class="score-list" id="finalScores"></div>
-    <button class="btn primary block" id="again">ИГРАТЬ СНОВА</button>
-    <button class="btn block" id="changeSettings">Изменить настройки</button>
+
+    <button class="btn primary block" id="again">
+      РЕВАНШ 🔥
+    </button>
+
+    <button class="btn block" id="changeSettings">
+      Изменить настройки
+    </button>
   </div>
 </section>
+
 </main>
-<div class="footer">КАВЕРЗА · Веселитесь и уважайте границы друг друга</div>
+
+<div class="footer">
+  КАВЕРЗА · Играйте смело, уважайте границы 💜
+  <br>
+  Всё работает прямо в браузере, без регистрации.
 </div>
-<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<div class="toast hidden"
+     id="toast"
+     role="status"
+     aria-live="polite"></div>
 
 <script>
 "use strict";
@@ -190,478 +711,841 @@ input,select{width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 
-const categories = {
- question:{name:"ВОПРОС",emoji:"💬",points:1,tasks:[
- "Какой самый нелепый поступок ты совершал?",
- "Какую свою привычку ты хотел бы изменить?",
- "Какое первое впечатление ты производишь на людей?",
- "Какой самый странный сон ты помнишь?",
- "Какой навык ты хотел бы освоить за один день?",
- "Что может моментально поднять тебе настроение?",
- "Какой самый спонтанный поступок ты совершал?",
- "Какую песню ты знаешь наизусть, но стесняешься признаться?",
- "Ты выберешь путешествие в прошлое или будущее?",
- "Какой фильм ты готов пересматривать бесконечно?",
- "Какая у тебя самая необычная способность?",
- "Что ты никогда не попробуешь даже за миллион?",
- "Какой совет ты дал бы себе пять лет назад?",
- "Какая покупка оказалась самой бесполезной?",
- "Что тебя смешит даже в плохом настроении?",
- "С кем из известных людей ты хотел бы поговорить?",
- "Какое блюдо ты готовишь лучше всего?",
- "Что ты обычно откладываешь на потом?",
- "Какое приключение ты хотел бы пережить?",
- "Какая мелочь способна испортить тебе день?"
- ]},
- action:{name:"ДЕЙСТВИЕ",emoji:"⚡",points:2,tasks:[
- "Изобрази робота, у которого заканчивается заряд.",
- "Изобрази ведущего новостей о самом обычном событии.",
- "Скажи алфавит как комментатор гонки.",
- "Покажи без слов, как ты собираешься утром.",
- "Изобрази кота, который требует еду.",
- "Станцуй пять секунд без музыки.",
- "Произнеси своё имя голосом супергероя.",
- "Изобрази человека, впервые увидевшего снег.",
- "Расскажи историю, используя три случайных слова.",
- "Изобрази победу в чемпионате по сну.",
- "Придумай рекламный слоган для обычной ложки.",
- "Сделай три максимально пафосные позы.",
- "Изобрази злодея из мультфильма.",
- "Скажи скороговорку три раза подряд.",
- "Покажи удивление без слов.",
- "Прокомментируй поход к холодильнику как спортивный матч.",
- "Придумай новое рукопожатие с игроком справа.",
- "Изобрази человека, наступившего на невидимый кубик.",
- "Придумай смешное прозвище самому себе.",
- "Спой строчку песни голосом оперного певца."
- ]},
- dare:{name:"ВЫЗОВ",emoji:"🔥",points:3,tasks:[
- "Не улыбайся 20 секунд, пока остальные тебя смешат.",
- "Удержи равновесие на одной ноге 15 секунд.",
- "Назови пять животных за пять секунд.",
- "Назови семь городов за десять секунд.",
- "Произнеси своё имя задом наперёд.",
- "Сделай десять приседаний, если тебе комфортно.",
- "Придумай мини-рэп из двух строк о компании.",
- "Назови пять вещей на букву «К» за пять секунд.",
- "Скажи три комплимента разным игрокам.",
- "Объясни слово «пылесос», не называя его.",
- "Изобрази три эмоции подряд без слов.",
- "Придумай историю из трёх предложений за 15 секунд.",
- "Назови пять фильмов за десять секунд.",
- "Скажи скороговорку три раза подряд.",
- "Придумай название музыкальной группы из присутствующих.",
- "Продай воображаемый телефон.",
- "Назови четыре круглых предмета за пять секунд.",
- "Придумай смешной тост.",
- "Изобрази вид спорта, чтобы остальные угадали.",
- "Расскажи короткую историю с серьёзным лицом."
- ]},
- reveal:{name:"ОТКРОВЕНИЕ",emoji:"🤫",points:2,tasks:[
- "Расскажи о своём самом смешном провале.",
- "Какую мелочь ты обычно скрываешь от окружающих?",
- "Какое у тебя было самое странное увлечение?",
- "Какой комплимент ты запомнил надолго?",
- "Что ты давно хотел попробовать, но пока не решился?",
- "Какую детскую мечту ты помнишь до сих пор?",
- "Какой навык окружающие недооценивают в тебе?",
- "Какое событие заставило тебя гордиться собой?",
- "Какой забавный факт о тебе мало кто знает?",
- "Какой свой поступок ты считаешь особенно смелым?",
- "Чему ты научился у человека, который тебя удивил?",
- "Какая твоя привычка кажется другим необычной?",
- "Что ты ценишь в дружбе больше всего?",
- "Какое решение оказалось лучше, чем ты ожидал?",
- "Какой момент ты хотел бы пережить ещё раз?",
- "Какая твоя сильная сторона помогает в трудностях?",
- "Что ты считаешь своим главным достижением?",
- "Какой урок ты получил самым неожиданным способом?",
- "Что ты хотел бы чаще делать в свободное время?",
- "Какое качество ты больше всего ценишь в людях?"
- ]},
- twist:{name:"КАВЕРЗА",emoji:"🌀",points:3,tasks:[
- "Следующий ответ произнеси голосом диктора.",
- "Придумай новое название этой игре за десять секунд.",
- "Объясни правила футбола инопланетянину.",
- "Придумай суперспособность для игрока напротив.",
- "Расскажи о своём дне как о трейлере боевика.",
- "Придумай смешное название для этой компании.",
- "Опиши холодильник, не называя его назначения.",
- "Придумай новый праздник и объясни, как его отмечать.",
- "Скажи любую фразу так, будто ты очень удивлён.",
- "Придумай необычный закон для идеального мира.",
- "Объясни назначение носков как учёный на конференции.",
- "Сочини заголовок новости об этой игре.",
- "Назови три применения пластиковой бутылки.",
- "Объясни инопланетянину, что такое пицца.",
- "Придумай имя и биографию супергерою.",
- "Объясни телефон человеку из прошлого.",
- "Продай билет на самое странное шоу.",
- "Придумай правило, которое действует один раунд.",
- "Опиши игрока как персонажа видеоигры.",
- "Расскажи сказку, в которой главный герой — тапок."
- ]},
- bonus:{name:"БОНУС",emoji:"⭐",points:0,tasks:[
- "Получи 2 дополнительных очка!",
- "Получи 3 очка за пять названных любимых блюд.",
- "Все игроки получают по одному очку.",
- "Получи 2 очка и придумай себе игровой титул.",
- "Получи 1 очко за честный ответ на вопрос компании.",
- "Получи 2 очка за самую убедительную победную речь.",
- "Получи 1 очко и назначь следующего игрока.",
- "Получи 2 очка и придумай девиз компании.",
- "Получи 3 очка за короткий анекдот.",
- "Получи 2 очка, назвав пять фруктов за пять секунд.",
- "Получи 1 очко за самый громкий победный возглас.",
- "Выбери игрока: он получает 1 бонусное очко.",
- "Получи 2 очка за комплимент каждому игроку.",
- "Получи 1 очко за удачу!",
- "Все игроки, кроме тебя, хлопают три раза — получи очко.",
- "Получи 2 очка и выбери следующую категорию.",
- "Выбери партнёра для испытания: оба получаете очко.",
- "Получи 2 очка за смешное название команды.",
- "Получи 1 очко и объяви себя капитаном на один раунд.",
- "Получи 2 очка за самый оригинальный тост."
- ]}
+const order = [
+  "question", "action", "dare",
+  "reveal", "twist", "bonus"
+];
+
+const avatars = [
+  "😎","🦊","🐼","🐸","🐯",
+  "🐙","🐺","🦄","🐲","👽"
+];
+
+// База вопросов и заданий.
+// soft — лёгкие, bold — смелые, spicy — 18+.
+
+const data = {
+  question: {
+    name: "ВОПРОС",
+    emoji: "💬",
+    points: 1,
+    soft: [
+      "Какую фразу ты повторяешь чаще всего?",
+      "Что самое нелепое ты покупал?",
+      "Какую песню тайно любишь?",
+      "В чём ты совершенно бесполезен?",
+      "Какая твоя самая странная привычка?",
+      "Когда ты последний раз краснел?",
+      "Какое прозвище тебе совсем не подходит?",
+      "Какую еду ты готов защищать до последнего?",
+      "Что бы ты удалил из своей истории поиска, если бы её показали на экране?",
+      "Какая мелочь заставляет тебя нервничать?"
+    ],
+    bold: [
+      "Кому из присутствующих ты бы не доверил выбрать тебе свидание? Почему?",
+      "Кто здесь производит самое обманчивое первое впечатление?",
+      "Какую ложь о себе ты поддерживал дольше всего?",
+      "Кому из компании ты бы дал доступ к своему телефону на пять минут?",
+      "Когда ты в последний раз притворялся занятым, чтобы не встречаться?",
+      "С кем из присутствующих ты бы поменялся жизнью на неделю?",
+      "Какой комплимент ты произнёс неискренне?",
+      "Какой твой самый неловкий флирт закончился провалом?",
+      "Что ты чаще всего преувеличиваешь в рассказах о себе?",
+      "Чьё мнение здесь для тебя неожиданно важно?",
+      "Какое сообщение ты отправил и сразу пожалел?",
+      "Когда ты в последний раз проверял, кто посмотрел твою историю?",
+      "Кому из этой компании ты бы доверил придумать тебе биографию для приложения знакомств?",
+      "Какой у тебя самый смешной повод для ревности?",
+      "Кого из присутствующих ты бы взял напарником на двойное свидание?"
+    ],
+    spicy: [
+      "Был ли у тебя поцелуй, о котором ты потом жалел?",
+      "Какой твой самый нелепый повод отказаться от второго свидания?",
+      "Ты когда-нибудь флиртовал с двумя людьми в один вечер?",
+      "Какой романтический намёк ты совершенно не понял?",
+      "Кто из присутствующих лучше всех умеет флиртовать, по твоему мнению?",
+      "Ты когда-нибудь изображал равнодушие, хотя человек очень нравился?",
+      "Какое свидание ты хотел бы стереть из памяти?",
+      "Какая твоя самая неловкая история про бывших?",
+      "Ты когда-нибудь возвращался к человеку только из-за скуки?",
+      "Какая твоя самая смелая фраза при знакомстве?"
+    ]
+  },
+
+  action: {
+    name: "ДЕЙСТВИЕ",
+    emoji: "⚡",
+    points: 2,
+    soft: [
+      "Изобрази будильник, который не хотят выключать.",
+      "Продай компании воображаемый кирпич.",
+      "Спой рекламу зубной пасты.",
+      "Придумай себе смешной титул.",
+      "Покажи три эмоции за пять секунд.",
+      "Объясни слово «холодильник» без существительных.",
+      "Изобрази злодея, который боится котят.",
+      "Покажи походку знаменитости без подсказок."
+    ],
+    bold: [
+      "Сделай 20-секундную рекламу себя как идеального соседа.",
+      "Произнеси тост так, будто ты тайно всех подозреваешь.",
+      "Сыграй свидание с воображаемым человеком, который говорит только «угу».",
+      "Изобрази свою реакцию, когда случайно лайкнул фото пятилетней давности.",
+      "Попроси у воображаемого начальника повышение в стиле мыльной оперы.",
+      "Покажи, как ты пытаешься выглядеть круто перед симпатичным человеком.",
+      "Скажи каждому игроку по одному нелепо пафосному комплименту.",
+      "Изобрази, как объясняешь родителям мем, который сам не понимаешь.",
+      "Расскажи о своём последнем неловком моменте голосом диктора новостей.",
+      "Изобрази расставание с любимым пледом."
+    ],
+    spicy: [
+      "Сыграй сцену первого свидания, на котором ты пытаешься скрыть, что забыл имя человека.",
+      "Сделай самую неубедительную попытку флирта с воображаемым человеком.",
+      "Придумай абсурдное романтическое признание человеку по выбору — только с его согласия.",
+      "Покажи, как ты ведёшь себя, когда видишь бывшего в магазине.",
+      "Произнеси три совершенно безобидные фразы максимально соблазнительным голосом.",
+      "Сыграй сцену ревности к домашнему растению."
+    ]
+  },
+
+  dare: {
+    name: "ВЫЗОВ",
+    emoji: "🔥",
+    points: 3,
+    soft: [
+      "Не улыбайся 15 секунд, пока остальные строят рожицы.",
+      "Назови пять фильмов за 10 секунд.",
+      "Сочини четверостишие про тапок.",
+      "Покажи три разных танцевальных движения.",
+      "Назови семь предметов на букву «С».",
+      "Расскажи историю из трёх предложений без буквы «А»."
+    ],
+    bold: [
+      "За 20 секунд придумай три красных флага для самого себя.",
+      "Назови пять причин, почему тебя нельзя брать на необитаемый остров.",
+      "Придумай три смешных оправдания за опоздание на свидание.",
+      "Произнеси минутную речь, почему ты заслуживаешь Оскар за неловкость.",
+      "Не используй слова «я» и «мне» в ответе на три вопроса компании.",
+      "Назови три своих недостатка как преимущества на собеседовании.",
+      "Сыграй диалог с человеком, которому ты случайно отправил не то сообщение.",
+      "Придумай пять нелепых причин, почему тебя должны пригласить на вечеринку."
+    ],
+    spicy: [
+      "За 15 секунд назови пять причин, почему свидание может пойти не так.",
+      "Придумай три максимально ужасных фразы для знакомства.",
+      "Расскажи историю о самом провальном флирте, используя только пять предложений.",
+      "Сыграй 30-секундную сцену, как ты случайно встретил двух бывших одновременно.",
+      "Назови пять признаков, что ты пытаешься понравиться человеку."
+    ]
+  },
+
+  reveal: {
+    name: "ОТКРОВЕНИЕ",
+    emoji: "🤫",
+    points: 2,
+    soft: [
+      "Чего ты стеснялся в детстве?",
+      "Когда ты последний раз делал вид, что понял шутку?",
+      "Какой у тебя самый бесполезный талант?",
+      "Какое странное правило ты придумал себе?",
+      "Что ты никогда не умел делать нормально?",
+      "Какую свою привычку ты оправдываешь?"
+    ],
+    bold: [
+      "Кого из этой компании ты сначала неправильно оценил?",
+      "Ты когда-нибудь избегал человека, который тебе нравился?",
+      "Что о тебе друзья часто понимают неправильно?",
+      "Какую глупость ты делал ради внимания?",
+      "Ты когда-нибудь притворялся, что не увидел знакомого?",
+      "Какой вопрос тебе чаще всего неудобно задают?",
+      "Какая твоя черта мешает отношениям?",
+      "В чём ты завидуешь другим, хотя не хочешь это признавать?",
+      "Когда ты в последний раз специально пытался произвести впечатление?",
+      "Какой совет об отношениях ты сам никогда не соблюдал?"
+    ],
+    spicy: [
+      "Что для тебя самый неожиданный повод потерять интерес к человеку?",
+      "Ты когда-нибудь соглашался на свидание просто из любопытства?",
+      "Какой комплимент тебе хотелось бы услышать от симпатичного человека?",
+      "Какую неловкую историю о влюблённости ты готов рассказать?",
+      "Ты когда-нибудь ревновал, хотя не был в отношениях?",
+      "Какой романтический поступок показался тебе слишком театральным?"
+    ]
+  },
+
+  twist: {
+    name: "КАВЕРЗА",
+    emoji: "🌀",
+    points: 3,
+    soft: [
+      "Объясни, почему чайник должен стать президентом.",
+      "Придумай рекламу невидимых носков.",
+      "Изобрази своё утро как фильм ужасов.",
+      "Придумай странный закон для этой компании.",
+      "Скажи тост, используя слова «пельмень», «космос» и «любовь»."
+    ],
+    bold: [
+      "Выбери игрока: придумайте друг другу по смешному названию автобиографии.",
+      "Кто из присутствующих пережил бы реалити-шоу лучше всех? Обоснуй как ведущий.",
+      "Представь, что вся компания — сериал. Назови главного героя и главного интригана.",
+      "Объясни, почему тебя нужно забанить в приложении знакомств — в шутку.",
+      "Назови три безобидных причины, по которым ты мог бы оказаться в центре скандала.",
+      "Придумай каждому игроку роль в ограблении холодильника.",
+      "Расскажи о своём самом скучном дне как о запретной сенсации.",
+      "Назови себя идеальным кандидатом на худшее первое свидание и защити позицию."
+    ],
+    spicy: [
+      "Назови самый нелепый повод для расставания и защити его как адвокат.",
+      "Придумай название реалити-шоу о своих бывших.",
+      "Опиши идеальное свидание так, чтобы оно звучало как криминальный триллер.",
+      "Составь смешную анкету знакомств из трёх заведомо ужасных фактов.",
+      "Назови три абсурдных правила для любовного треугольника в сериале."
+    ]
+  },
+
+  bonus: {
+    name: "БОНУС",
+    emoji: "⭐",
+    points: 0,
+    soft: [
+      {
+        text: "Удача улыбается: получи 2 очка!",
+        effect: "self",
+        points: 2
+      },
+      {
+        text: "Скажи три добрых слова о компании и получи 2 очка.",
+        effect: "self",
+        points: 2
+      },
+      {
+        text: "Все игроки получают по 1 очку!",
+        effect: "all",
+        points: 1
+      },
+      {
+        text: "Выбери другого игрока: он получит 1 очко. Реши вслух, кому достаётся подарок.",
+        effect: "choose",
+        points: 1
+      },
+      {
+        text: "Придумай смешной девиз компании и получи 3 очка.",
+        effect: "self",
+        points: 3
+      },
+      {
+        text: "Получите по 1 очку: ты и выбранный тобой партнёр.",
+        effect: "partner",
+        points: 1
+      }
+    ],
+    bold: [],
+    spicy: []
+  }
 };
 
-const categoryOrder = ["question","action","dare","reveal","twist","bonus"];
-const avatars = ["😎","🦊","🐼","🐸","🐯","🐙","🐺","🦄","🐲","👽"];
-
+// Состояние игры
 const state = {
- players:[],rounds:10,turn:0,turnsTaken:0,maxTurns:0,
- enabled:[],used:{},category:null,task:null,angle:0,
- spinning:false,active:false,timerId:null,seconds:60,started:false
+  players: [],
+  rounds: 10,
+  turn: 0,
+  taken: 0,
+  max: 0,
+  enabled: [],
+  level: "bold",
+  used: {},
+  category: null,
+  task: null,
+  angle: 0,
+  spinning: false,
+  active: false,
+  started: false,
+  spinToken: 0,
+  spinTimeout: null,
+  timerId: null,
+  deadline: 0
 };
-let toastTimeout;
 
-function toast(message){
- const el=$("#toast");
- el.textContent=message;
- el.classList.remove("hidden");
- clearTimeout(toastTimeout);
- toastTimeout=setTimeout(()=>el.classList.add("hidden"),2400);
+let toastId = null;
+
+// Всплывающие сообщения
+function notify(message) {
+  const element = $("#toast");
+  element.textContent = message;
+  element.classList.remove("hidden");
+
+  clearTimeout(toastId);
+  toastId = setTimeout(() => {
+    element.classList.add("hidden");
+  }, 2500);
 }
 
-function renderInputs(names){
- const box=$("#playerInputs");
- box.replaceChildren();
- names.forEach((name,i)=>{
-  const row=document.createElement("div");
-  row.className="player-row";
-  const num=document.createElement("div");
-  num.className="player-num";
-  num.textContent=i+1;
-  const input=document.createElement("input");
-  input.maxLength=24;
-  input.autocomplete="off";
-  input.placeholder="Имя игрока "+(i+1);
-  input.setAttribute("aria-label",input.placeholder);
-  input.value=name;
-  row.append(num,input);
-  box.append(row);
- });
- $("#addPlayer").disabled=names.length>=10;
-}
+// Случайный выбор
+function rand(n) {
+  if (n <= 1) return 0;
 
-function selectedCategories(){
- return $$("#categoryChoices input:checked").map(x=>x.value);
-}
+  if (globalThis.crypto?.getRandomValues) {
+    const a = new Uint32Array(1);
+    const limit = Math.floor(4294967296 / n) * n;
 
-function startGame(){
- const names=$$("#playerInputs input").map(x=>x.value.trim()).filter(Boolean);
- if(names.length<2){toast("Введите имена минимум двух игроков");return;}
- const enabled=selectedCategories();
- if(!enabled.length){toast("Выберите хотя бы одну категорию");return;}
+    do {
+      crypto.getRandomValues(a);
+    } while (a[0] >= limit);
 
- clearInterval(state.timerId);
- state.players=names.map((name,i)=>({name,avatar:avatars[i%avatars.length],score:0,turns:0}));
- state.rounds=Number($("#rounds").value)||10;
- state.turn=0;
- state.turnsTaken=0;
- state.maxTurns=state.players.length*state.rounds;
- state.enabled=enabled;
- state.used={};
- state.category=null;
- state.task=null;
- state.angle=0;
- state.spinning=false;
- state.active=false;
- state.seconds=60;
- state.started=true;
-
- $("#wheel").style.transition="none";
- $("#wheel").style.transform="rotate(0deg)";
- $("#wheel").offsetHeight;
- $("#wheel").style.transition="";
-
- $("#setup").classList.add("hidden");
- $("#results").classList.add("hidden");
- $("#game").classList.remove("hidden");
- $("#wheelPanel").classList.remove("hidden");
- $("#challenge").classList.add("hidden");
- $("#spin").disabled=false;
- updateGame();
- toast("Игра началась!");
-}
-
-function updateGame(){
- const p=state.players[state.turn];
- if(!p)return;
- $("#avatar").textContent=p.avatar;
- $("#playerName").textContent=p.name;
- $("#progress").textContent=`Ход ${state.turnsTaken+1} из ${state.maxTurns}`;
- $("#currentScore").textContent=`Очки: ${p.score}`;
- $("#turnInfo").textContent=`Личный раунд ${p.turns+1} из ${state.rounds}`;
-
- const sorted=[...state.players].sort((a,b)=>b.score-a.score);
- const box=$("#scores");
- box.replaceChildren();
- sorted.forEach((player,i)=>{
-  const row=document.createElement("div");
-  row.className="score-row";
-  const av=document.createElement("span");
-  av.className="score-avatar";
-  av.textContent=player.avatar;
-  const name=document.createElement("span");
-  name.className="score-name";
-  name.textContent=`${i+1}. ${player.name}`;
-  const score=document.createElement("span");
-  score.className="score-value";
-  score.textContent=player.score;
-  row.append(av,name,score);
-  box.append(row);
- });
-}
-
-function chooseTask(key){
- const all=categories[key].tasks;
- if(!state.used[key])state.used[key]=[];
- let available=all.filter(t=>!state.used[key].includes(t));
- if(!available.length){state.used[key]=[];available=[...all];}
- const task=available[Math.floor(Math.random()*available.length)];
- state.used[key].push(task);
- return task;
-}
-
-function spin(){
- if(state.spinning||state.active||!state.started)return;
- state.spinning=true;
- $("#spin").disabled=true;
-
- const key=state.enabled[Math.floor(Math.random()*state.enabled.length)];
- const index=categoryOrder.indexOf(key);
-
- // Сектор выбранной категории точно совмещается с верхним указателем.
- const target=((360-(index*60+30))%360+360)%360;
- const current=((state.angle%360)+360)%360;
- const delta=(target-current+360)%360;
- state.angle+=1440+delta;
- $("#wheel").style.transform=`rotate(${state.angle}deg)`;
-
- setTimeout(()=>{
-  if(!state.started)return;
-  state.spinning=false;
-  state.category=key;
-  state.task=chooseTask(key);
-  showChallenge();
- },3150);
-}
-
-function showChallenge(){
- const cat=categories[state.category];
- $("#wheelPanel").classList.add("hidden");
- $("#challenge").classList.remove("hidden");
- $("#badge").textContent=`${cat.emoji} ${cat.name}`;
- $("#task").textContent=state.task;
- $("#done").disabled=false;
- $("#skip").disabled=false;
- state.active=true;
- state.seconds=60;
- updateTimer();
- clearInterval(state.timerId);
- state.timerId=setInterval(()=>{
-  state.seconds--;
-  updateTimer();
-  if(state.seconds<=0){
-   clearInterval(state.timerId);
-   state.timerId=null;
-   finishTurn(false,true);
+    return a[0] % n;
   }
- },1000);
+
+  return Math.floor(Math.random() * n);
 }
 
-function updateTimer(){
- $("#timer").textContent=Math.max(0,state.seconds);
- $("#timer").classList.toggle("warning",state.seconds<=10);
- $("#fill").style.width=Math.max(0,state.seconds/60*100)+"%";
- $("#fill").style.background=state.seconds<=10?"var(--pink)":"var(--green)";
+// Создание списка игроков
+function renderInputs(names) {
+  const box = $("#playerInputs");
+  box.replaceChildren();
+
+  names.forEach((name, i) => {
+    const row = document.createElement("div");
+    row.className = "player-row";
+
+    const num = document.createElement("span");
+    num.className = "num";
+    num.textContent = i + 1;
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.maxLength = 24;
+    input.autocomplete = "off";
+    input.value = name;
+    input.placeholder = `Игрок ${i + 1}`;
+    input.setAttribute("aria-label", `Имя игрока ${i + 1}`);
+
+    const remove = document.createElement("button");
+    remove.className = "remove";
+    remove.type = "button";
+    remove.textContent = "×";
+    remove.title = "Удалить игрока";
+    remove.setAttribute("aria-label", `Удалить игрока ${i + 1}`);
+    remove.disabled = names.length <= 2;
+
+    remove.addEventListener("click", () => {
+      const remaining = $$("#playerInputs input")
+        .map(x => x.value)
+        .filter((_, j) => j !== i);
+
+      renderInputs(remaining);
+    });
+
+    row.append(num, input, remove);
+    box.append(row);
+  });
+
+  $("#addPlayer").disabled = names.length >= 10;
 }
 
-function bonusPoints(task){
- const p=state.players[state.turn];
-
- if(task.startsWith("Все игроки получают")){
-  state.players.forEach(x=>x.score++);
-  return "Все игроки получили по очку!";
- }
-
- const match=task.match(/Получи (\d+) (?:дополнительных )?очк/);
- if(match){
-  const points=Number(match[1]);
-  p.score+=points;
-  return `${p.name} получает ${points} очк.`;
- }
-
- if(task.startsWith("Выбери игрока")){
-  const others=state.players.filter(x=>x!==p);
-  if(others.length){
-   const chosen=others[Math.floor(Math.random()*others.length)];
-   chosen.score++;
-   return `${chosen.name} получает бонусное очко!`;
-  }
- }
-
- if(task.startsWith("Выбери партнёра")){
-  const others=state.players.filter(x=>x!==p);
-  p.score++;
-  if(others.length)others[Math.floor(Math.random()*others.length)].score++;
-  return "Участники получили по очку!";
- }
-
- if(task.includes("назначь следующего игрока")||task.includes("капитаном")){
-  p.score++;
-  return `${p.name} получает очко!`;
- }
-
- if(task.includes("Все игроки, кроме тебя")){
-  p.score++;
-  return `${p.name} получает очко!`;
- }
-
- p.score++;
- return `${p.name} получает бонусное очко!`;
-}
-
-function finishTurn(completed,timedOut=false){
- if(!state.active)return;
- clearInterval(state.timerId);
- state.timerId=null;
- state.active=false;
-
- const p=state.players[state.turn];
- let message;
-
- if(completed){
-  if(state.category==="bonus"){
-   message=bonusPoints(state.task);
-  }else{
-   const points=categories[state.category].points;
-   p.score+=points;
-   message=`${p.name} получает ${points} очк.`;
-  }
- }else{
-  message=timedOut?"Время вышло — ход пропущен.":"Испытание пропущено. Очки не начислены.";
- }
-
- p.turns++;
- state.turnsTaken++;
-
- $("#challenge").classList.add("hidden");
- $("#wheelPanel").classList.remove("hidden");
-
- if(state.turnsTaken>=state.maxTurns){
-  updateGame();
-  toast(message);
-  setTimeout(showResults,600);
-  return;
- }
-
- state.turn=(state.turn+1)%state.players.length;
- updateGame();
- $("#spin").disabled=false;
- toast(message);
-}
-
-function showResults(){
- clearInterval(state.timerId);
- state.timerId=null;
- state.started=false;
- state.active=false;
- state.spinning=false;
-
- $("#game").classList.add("hidden");
- $("#setup").classList.add("hidden");
- $("#results").classList.remove("hidden");
-
- const sorted=[...state.players].sort((a,b)=>b.score-a.score);
- const top=sorted[0].score;
- const winners=sorted.filter(p=>p.score===top);
- $("#winner").textContent=winners.length>1
-  ?`🤝 Ничья: ${winners.map(p=>p.name).join(", ")}!`
-  :`👑 Победитель — ${winners[0].name}!`;
-
- const box=$("#finalScores");
- box.replaceChildren();
- sorted.forEach((p,i)=>{
-  const row=document.createElement("div");
-  row.className="score-row";
-  const av=document.createElement("span");
-  av.className="score-avatar";
-  av.textContent=p.avatar;
-  const name=document.createElement("span");
-  name.className="score-name";
-  name.textContent=`${i+1}. ${p.name}`;
-  const score=document.createElement("span");
-  score.className="score-value";
-  score.textContent=`${p.score} ★`;
-  row.append(av,name,score);
-  box.append(row);
- });
-}
-
-$("#addPlayer").addEventListener("click",()=>{
- const names=$$("#playerInputs input").map(x=>x.value);
- if(names.length>=10)return;
- names.push("");
- renderInputs(names);
- const inputs=$$("#playerInputs input");
- inputs[inputs.length-1].focus();
-});
-
-$("#start").addEventListener("click",startGame);
-$("#spin").addEventListener("click",spin);
-$("#done").addEventListener("click",()=>finishTurn(true));
-$("#skip").addEventListener("click",()=>finishTurn(false));
-
-$("#endGame").addEventListener("click",()=>{
- if(!state.started)return;
- if(confirm("Завершить игру и показать текущие результаты?")){
+// Остановка таймера и отложенных событий
+function stopAsync() {
   clearInterval(state.timerId);
-  state.timerId=null;
-  state.active=false;
-  showResults();
- }
+  clearTimeout(state.spinTimeout);
+
+  state.timerId = null;
+  state.spinTimeout = null;
+  state.spinToken++;
+  state.spinning = false;
+  state.active = false;
+}
+
+// Подписи рулетки
+function buildWheel() {
+  const wheel = $("#wheel");
+
+  wheel.querySelectorAll(".wheel-label")
+    .forEach(x => x.remove());
+
+  order.forEach((key, i) => {
+    const label = document.createElement("span");
+    label.className = "wheel-label";
+    label.style.setProperty("--a", `${i * 60}deg`);
+    label.textContent = `${data[key].emoji} ${data[key].name}`;
+    wheel.append(label);
+  });
+}
+
+// Начало игры
+function startGame() {
+  const inputs = $$("#playerInputs input");
+
+  if (inputs.some(x => !x.value.trim())) {
+    notify("Заполните имена всех игроков");
+    return;
+  }
+
+  const names = inputs.map(x => x.value.trim());
+
+  if (
+    new Set(
+      names.map(x => x.toLocaleLowerCase("ru"))
+    ).size !== names.length
+  ) {
+    notify("Имена игроков должны отличаться");
+    return;
+  }
+
+  const enabled = $$("#categoryChoices input:checked")
+    .map(x => x.value);
+
+  if (!enabled.length) {
+    notify("Выберите хотя бы одну категорию");
+    return;
+  }
+
+  const level = $('input[name="level"]:checked').value;
+
+  if (
+    level === "spicy" &&
+    !confirm(
+      "Режим 18+: все участники совершеннолетние " +
+      "и согласны играть с более откровенными вопросами?"
+    )
+  ) {
+    return;
+  }
+
+  stopAsync();
+
+  state.players = names.map((name, i) => ({
+    name,
+    avatar: avatars[i],
+    score: 0,
+    turns: 0
+  }));
+
+  state.rounds = Number($("#rounds").value);
+  state.turn = 0;
+  state.taken = 0;
+  state.max = names.length * state.rounds;
+  state.enabled = enabled;
+  state.level = level;
+  state.used = {};
+  state.category = null;
+  state.task = null;
+  state.angle = 0;
+  state.started = true;
+
+  const wheel = $("#wheel");
+  wheel.style.transition = "none";
+  wheel.style.transform = "rotate(0deg)";
+
+  // Принудительная перерисовка для сброса вращения
+  void wheel.offsetWidth;
+  wheel.style.transition = "";
+
+  $("#setup").classList.add("hidden");
+  $("#results").classList.add("hidden");
+  $("#game").classList.remove("hidden");
+
+  $("#wheelPanel").classList.remove("hidden");
+  $("#challenge").classList.add("hidden");
+
+  $("#spin").disabled = false;
+
+  updateGame();
+  notify("Игра началась! 😈");
+}
+
+// Отображение турнирной таблицы
+function scoreRows(target, sorted) {
+  const box = $(target);
+  box.replaceChildren();
+
+  sorted.forEach((player, i) => {
+    const row = document.createElement("div");
+    row.className = "score-row";
+
+    const avatar = document.createElement("span");
+    avatar.textContent = player.avatar;
+    avatar.style.fontSize = "24px";
+
+    const name = document.createElement("span");
+    name.className = "score-name";
+    name.textContent = `${i + 1}. ${player.name}`;
+
+    const score = document.createElement("span");
+    score.className = "score-value";
+    score.textContent = `${player.score} ★`;
+
+    row.append(avatar, name, score);
+    box.append(row);
+  });
+}
+
+// Обновление текущего игрока
+function updateGame() {
+  const player = state.players[state.turn];
+  if (!player) return;
+
+  $("#avatar").textContent = player.avatar;
+  $("#playerName").textContent = player.name;
+
+  $("#progress").textContent =
+    `Ход ${Math.min(state.taken + 1, state.max)} / ${state.max}`;
+
+  $("#currentScore").textContent = `${player.score} ★`;
+
+  $("#turnInfo").textContent =
+    `Личный раунд ${Math.min(player.turns + 1, state.rounds)} / ${state.rounds}`;
+
+  scoreRows(
+    "#scores",
+    [...state.players].sort((a, b) => b.score - a.score)
+  );
+}
+
+// Формирование набора заданий по уровню сложности
+function taskPool(key) {
+  const category = data[key];
+
+  return [
+    ...category.soft,
+    ...(state.level === "soft" ? [] : category.bold),
+    ...(state.level === "spicy" ? category.spicy : [])
+  ];
+}
+
+// Выбор задания без повтора, пока набор не закончится
+function chooseTask(key) {
+  const pool = taskPool(key);
+  const used = state.used[key] ?? new Set();
+
+  // Исправление ошибки:
+  // выбираем свободные ИНДЕКСЫ, а не тексты заданий
+  let available = pool
+    .map((_, i) => i)
+    .filter(i => !used.has(i));
+
+  if (!available.length) {
+    used.clear();
+    available = pool.map((_, i) => i);
+  }
+
+  const index = available[rand(available.length)];
+  used.add(index);
+  state.used[key] = used;
+
+  return pool[index];
+}
+
+// Вращение рулетки
+function spin() {
+  if (!state.started || state.spinning || state.active) {
+    return;
+  }
+
+  state.spinning = true;
+  $("#spin").disabled = true;
+
+  const key = state.enabled[rand(state.enabled.length)];
+  const index = order.indexOf(key);
+
+  // Центр первого сектора — 0 градусов.
+  // Каждый следующий сектор сдвинут на 60 градусов.
+  // Поворачиваем выбранный центр под верхний указатель.
+  const target = (360 - index * 60) % 360;
+  const current = ((state.angle % 360) + 360) % 360;
+  const delta = (target - current + 360) % 360;
+
+  state.angle += 1440 + delta;
+
+  $("#wheel").style.transform =
+    `rotate(${state.angle}deg)`;
+
+  const token = ++state.spinToken;
+
+  const show = () => {
+    if (token !== state.spinToken || !state.started) {
+      return;
+    }
+
+    state.spinning = false;
+    state.category = key;
+    state.task = chooseTask(key);
+
+    showChallenge();
+  };
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  state.spinTimeout = setTimeout(
+    show,
+    reducedMotion ? 80 : 3300
+  );
+}
+
+// Показ задания
+function showChallenge() {
+  const category = data[state.category];
+
+  $("#wheelPanel").classList.add("hidden");
+  $("#challenge").classList.remove("hidden");
+
+  $("#badge").textContent =
+    `${category.emoji} ${category.name}`;
+
+  $("#task").textContent =
+    typeof state.task === "string"
+      ? state.task
+      : state.task.text;
+
+  $("#taskMeta").textContent =
+    state.category === "bonus"
+      ? "⭐ Бонусные очки"
+      : `+${category.points} ★ за выполнение`;
+
+  $("#done").disabled = false;
+  $("#skip").disabled = false;
+
+  state.active = true;
+  state.deadline = Date.now() + 60000;
+
+  tick();
+
+  clearInterval(state.timerId);
+  state.timerId = setInterval(tick, 200);
+}
+
+// Таймер на основе реального времени
+function tick() {
+  if (!state.active) return;
+
+  const remain = Math.max(
+    0,
+    state.deadline - Date.now()
+  );
+
+  const seconds = Math.ceil(remain / 1000);
+
+  $("#timer").textContent = seconds;
+
+  $("#timer").classList.toggle(
+    "warning",
+    seconds <= 10
+  );
+
+  $("#fill").style.width = `${remain / 600}%`;
+
+  $("#fill").style.background =
+    seconds <= 10 ? "var(--red)" : "var(--mint)";
+
+  if (remain === 0) {
+    finishTurn(false, true);
+  }
+}
+
+// Бонусные задания
+function bonusEffect(task) {
+  const player = state.players[state.turn];
+
+  if (task.effect === "all") {
+    state.players.forEach(x => {
+      x.score += task.points;
+    });
+
+    return "Все получили по очку!";
+  }
+
+  if (
+    task.effect === "choose" ||
+    task.effect === "partner"
+  ) {
+    const others = state.players.filter(
+      x => x !== player
+    );
+
+    const name = prompt(
+      `Кому достаются бонусные очки?\n` +
+      others.map(x => x.name).join(", ") +
+      `\nВведите имя:`
+    );
+
+    const chosen = others.find(
+      x =>
+        x.name.toLocaleLowerCase("ru") ===
+        String(name || "")
+          .trim()
+          .toLocaleLowerCase("ru")
+    );
+
+    if (!chosen) {
+      notify("Выбор не указан — бонус никому не начислен");
+
+      if (task.effect === "partner") {
+        player.score += task.points;
+      }
+
+      return "Бонус без выбранного игрока";
+    }
+
+    chosen.score += task.points;
+
+    if (task.effect === "partner") {
+      player.score += task.points;
+    }
+
+    return (
+      `${chosen.name} получает ${task.points} ★` +
+      (
+        task.effect === "partner"
+          ? `, ${player.name} тоже!`
+          : "!"
+      )
+    );
+  }
+
+  player.score += task.points;
+
+  return `${player.name} получает ${task.points} ★`;
+}
+
+// Завершение хода
+function finishTurn(completed, timedOut = false) {
+  if (!state.active) return;
+
+  clearInterval(state.timerId);
+  state.timerId = null;
+  state.active = false;
+
+  $("#done").disabled = true;
+  $("#skip").disabled = true;
+
+  const player = state.players[state.turn];
+  let message;
+
+  if (completed) {
+    if (state.category === "bonus") {
+      message = bonusEffect(state.task);
+    } else {
+      const points = data[state.category].points;
+
+      player.score += points;
+      message = `${player.name}: +${points} ★`;
+    }
+  } else {
+    message = timedOut
+      ? "Время вышло — без штрафа"
+      : "Пас принят — без штрафа";
+  }
+
+  player.turns++;
+  state.taken++;
+
+  $("#challenge").classList.add("hidden");
+  $("#wheelPanel").classList.remove("hidden");
+
+  if (state.taken >= state.max) {
+    showResults();
+    notify(message);
+    return;
+  }
+
+  state.turn =
+    (state.turn + 1) % state.players.length;
+
+  updateGame();
+  $("#spin").disabled = false;
+
+  notify(message);
+}
+
+// Финальные результаты
+function showResults() {
+  stopAsync();
+
+  state.started = false;
+
+  $("#game").classList.add("hidden");
+  $("#setup").classList.add("hidden");
+  $("#results").classList.remove("hidden");
+
+  const sorted = [...state.players].sort(
+    (a, b) => b.score - a.score
+  );
+
+  const top = sorted[0].score;
+  const winners = sorted.filter(
+    player => player.score === top
+  );
+
+  $("#winner").textContent =
+    winners.length > 1
+      ? `🤝 Ничья: ${winners.map(x => x.name).join(", ")}`
+      : `👑 ${winners[0].name} — король каверз!`;
+
+  scoreRows("#finalScores", sorted);
+}
+
+// Кнопка добавления игроков
+$("#addPlayer").addEventListener("click", () => {
+  const names = $$("#playerInputs input")
+    .map(x => x.value);
+
+  if (names.length >= 10) return;
+
+  renderInputs([...names, ""]);
+
+  $$("#playerInputs input").at(-1).focus();
 });
 
-$("#again").addEventListener("click",()=>{
- const names=state.players.map(p=>p.name);
- renderInputs(names);
- startGame();
+// Основные кнопки
+$("#start").addEventListener("click", startGame);
+
+$("#spin").addEventListener("click", spin);
+
+$("#done").addEventListener("click", () => {
+  finishTurn(true);
 });
 
-$("#changeSettings").addEventListener("click",()=>{
- clearInterval(state.timerId);
- state.timerId=null;
- state.started=false;
- state.active=false;
- state.spinning=false;
- $("#game").classList.add("hidden");
- $("#results").classList.add("hidden");
- $("#setup").classList.remove("hidden");
+$("#skip").addEventListener("click", () => {
+  finishTurn(false);
 });
 
-renderInputs(["Игрок 1","Игрок 2"]);
+// Досрочное завершение
+$("#endGame").addEventListener("click", () => {
+  if (
+    state.started &&
+    confirm("Закончить игру и показать текущие результаты?")
+  ) {
+    showResults();
+  }
+});
+
+// Реванш с теми же игроками
+$("#again").addEventListener("click", () => {
+  renderInputs(
+    state.players.map(player => player.name)
+  );
+
+  startGame();
+});
+
+// Возврат к настройкам
+$("#changeSettings").addEventListener("click", () => {
+  stopAsync();
+  state.started = false;
+
+  renderInputs(
+    state.players.map(player => player.name)
+  );
+
+  $("#game").classList.add("hidden");
+  $("#results").classList.add("hidden");
+  $("#setup").classList.remove("hidden");
+});
+
+// Инициализация
+buildWheel();
+renderInputs(["Игрок 1", "Игрок 2"]);
+
 </script>
 </body>
 </html>
