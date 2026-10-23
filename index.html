@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#0b0b19">
 <meta name="description" content="КАВЕРЗА — игра для компании: неожиданные вопросы, весёлые вызовы, интеллектуальные загадки и весёлые задания. Играйте бесплатно в браузере.">
 <title>КАВЕРЗА — игра для компании</title>
+<!-- Yandex.RTB: загрузчик для всех рекламных блоков -->
+<script>window.yaContextCb=window.yaContextCb||[]</script>
+<script src="https://yandex.ru/ads/system/context.js" async></script>
 <style>
 :root {
   color-scheme:dark;
@@ -189,6 +192,16 @@ input[type=text],select{width:100%;background:#0f1020;border:1px solid #ffffff30
 <section id="results" class="hidden">
   <div class="panel center"><div class="confetti">✨🎉✨</div><h2>Вот это была вечеринка!</h2><p class="muted">Финальные результаты</p><div class="task" id="winner"></div><div class="score-list" id="finalScores"></div><button class="btn primary block" id="again" type="button">РЕВАНШ 🔥</button><button class="btn block" id="changeSettings" type="button">Изменить настройки</button></div>
 </section>
+<!-- РСЯ: блок под текущим игровым экраном. Он не закрывает кнопки и рулетку. -->
+<div id="yandex_rtb_R-A-20268433-1"></div>
+<script>
+window.yaContextCb.push(() => {
+    Ya.Context.AdvManager.render({
+        "blockId": "R-A-20268433-1",
+        "renderTo": "yandex_rtb_R-A-20268433-1"
+    })
+})
+</script>
 </main>
 <div class="footer">КАВЕРЗА · Играйте смело, уважайте границы 💜<br>Без регистрации. Прямо в браузере. Звуки можно отключить.</div>
 </div>
@@ -988,7 +1001,7 @@ function confetti(seconds=2.7) {
   canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);
   ctx.setTransform(dpr,0,0,dpr,0,0);
   const colors=["#ff5aab","#a78bfa","#64e8c1","#ffdf83","#ffffff"];
-  const bits=Array.from({length:Math.min(150,Math.max(55,Math.floor(width/7)))},()=>({
+  const bits=Array.from({length:Math.min(150,Math.max(55,Math.floor(width/7)))},()=>( {
     x:Math.random()*width,y:-Math.random()*height*.7,
     w:3+Math.random()*5,h:5+Math.random()*7,v:1.8+Math.random()*4,
     spin:Math.random()*6,a:Math.random()*6,color:colors[random(colors.length)]
