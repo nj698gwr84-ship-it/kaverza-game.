@@ -1208,6 +1208,6 @@ document.addEventListener("pointerdown",ripple,{passive:true});
 document.addEventListener("click",event=>{if(event.target.closest("button")&&!event.target.closest("#soundToggle"))sfx("click");});
 window.addEventListener("pagehide",()=>{if(audioContext?.state==="running")audioContext.suspend().catch(()=>{});});
 buildWheel();renderInputs(["Игрок 1","Игрок 2"]);refreshSettings();showBankInfo();
-</script>
+<script src="./kaverza-metrika.js" defer></script>
 </body>
 </html>
