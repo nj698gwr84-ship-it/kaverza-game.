@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0b19">
-<meta name="description" content="КАВЕРЗА — игра для компании: неожиданные вопросы, весёлые вызовы, интеллектуальные загадки и взрослый режим 18+. Играйте бесплатно в браузере.">
+<meta name="description" content="КАВЕРЗА — игра для компании: неожиданные вопросы, весёлые вызовы, интеллектуальные загадки и весёлые задания. Играйте бесплатно в браузере.">
 <title>КАВЕРЗА — игра для компании</title>
 <style>
 :root {
@@ -65,7 +65,7 @@ input[type=text],select{width:100%;background:#0f1020;border:1px solid #ffffff30
 .category:has(input:checked){border-color:#f88dd477;background:#ff66b116}
 .category input{accent-color:var(--pink);width:17px;height:17px;flex-shrink:0}
 .category b{font-size:19px}
-.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .level{position:relative;cursor:pointer}.level input{position:absolute;opacity:0}
 .level span{display:flex;align-items:center;justify-content:center;min-height:49px;text-align:center;padding:13px 5px;border:1px solid #ffffff20;border-radius:13px;font-size:clamp(10px,2.7vw,12px);font-weight:850;background:#ffffff08}
 .level input:checked+span{background:#ff5aab22;border-color:#ff75ba;color:#ffd2e7}
@@ -150,13 +150,8 @@ input[type=text],select{width:100%;background:#0f1020;border:1px solid #ffffff30
       <div class="levels">
         <label class="level"><input type="radio" name="level" value="soft"><span>🙂 Лайт</span></label>
         <label class="level"><input type="radio" name="level" value="bold" checked><span>😏 Смело</span></label>
-        <label class="level"><input type="radio" name="level" value="spicy"><span>🔥 Без фильтра 18+</span></label>
       </div>
-      <p class="muted" style="margin:7px 0 0">В 18+ — флирт, взрослые признания и действия по взаимному согласию, без принуждения.</p>
-    </div>
-    <div class="field hidden" id="adultModeField">
-      <label class="field-title" for="adultMode">Для кого взрослые задания?</label>
-      <select id="adultMode"><option value="mixed">🎉 Смешанная компания</option><option value="party">🥳 Компания друзей</option><option value="couple">💞 Пары / свидание</option></select>
+      <p class="muted" style="margin:7px 0 0">В режиме «Смело» доступны все каверзные, романтические и неожиданные задания.</p>
     </div>
     <div class="field"><span class="field-title">Категории</span>
       <div class="categories" id="categoryChoices">
@@ -173,7 +168,7 @@ input[type=text],select{width:100%;background:#0f1020;border:1px solid #ffffff30
   <div class="panel">
     <h3>📜 Правила без занудства</h3>
     <p class="muted">Каждый ход — случайная выбранная категория. За выполненное задание начисляются очки. На задание — 60 секунд, можно пропустить без штрафа. Побеждает участник с наибольшим количеством очков.</p>
-    <div class="note">Любые прикосновения, объятия и поцелуи — только после явного согласия обоих участников. Можно выбрать альтернативу или пропустить задание. Не публикуйте чужие секреты, не показывайте личные переписки. Взрослый режим — только 18+.</div>
+    <div class="note">Любые прикосновения, объятия и поцелуи — только после явного согласия обоих участников. Можно выбрать альтернативу или пропустить задание. Не публикуйте чужие секреты, не показывайте личные переписки.</div>
   </div>
 </section>
 <section id="game" class="hidden">
@@ -195,7 +190,7 @@ input[type=text],select{width:100%;background:#0f1020;border:1px solid #ffffff30
   <div class="panel center"><div class="confetti">✨🎉✨</div><h2>Вот это была вечеринка!</h2><p class="muted">Финальные результаты</p><div class="task" id="winner"></div><div class="score-list" id="finalScores"></div><button class="btn primary block" id="again" type="button">РЕВАНШ 🔥</button><button class="btn block" id="changeSettings" type="button">Изменить настройки</button></div>
 </section>
 </main>
-<div class="footer">КАВЕРЗА · Играйте смело, уважайте границы 💜<br>Без регистрации. Прямо в браузере. Звуки можно отключить.<br><small>18+ — только для взрослых участников.</small></div>
+<div class="footer">КАВЕРЗА · Играйте смело, уважайте границы 💜<br>Без регистрации. Прямо в браузере. Звуки можно отключить.</div>
 </div>
 <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
 <script>
@@ -204,7 +199,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const order = ["question","action","dare","reveal","twist","bonus"];
 const avatars = ["😎","🦊","🐼","🐸","🐯","🐙","🐺","🦄","🐲","👽"];
-// Проверенная библиотека: лёгкие, смелые и взрослые задания (18+).
+// Все задания сохранены. Режим «Смело» объединяет расширенный набор вопросов и действий.
 // Каждая формулировка написана отдельно, без механической подстановки слов.
 const data = {
   question: {
@@ -339,8 +334,7 @@ const data = {
       "Какой вопрос о деньгах ты считаешь самым неловким?",
       "Ты чаще краснеешь от комплиментов или от собственных шуток?",
       "Если бы друзья составили на тебя инструкцию, что написали бы в разделе «Внимание»?",
-    ],
-    spicy: [
+      // Дополнительные задания для уровня «Смело».
       "Какую деталь во внешности человека ты считаешь особенно притягательной?",
       "Что для тебя сексуальнее: уверенный взгляд или тихий голос?",
       "Ты когда-нибудь хотел поцеловать человека в неожиданном месте?",
@@ -417,16 +411,16 @@ const data = {
       {"text":"В отношениях что надёжнее: читать мысли партнёра или задавать прямые вопросы?","answer":"Задавать прямые вопросы."},
       {"text":"Что важнее для доверия: идеальные комплименты или соблюдение обещаний?","answer":"Соблюдение обещаний."},
       {"text":"Что стоит сделать, если комплимент собеседнику оказался неприятен?","answer":"Извиниться и не повторять то, что нарушает его границы."},
-      {"text":"Кто из вас чаще говорит «выбирай фильм ты», но потом спорит с выбором?","audience":"couple"},
-      {"text":"На каком самом нелепом свидании вы могли бы отлично провести время вдвоём?","audience":"couple"},
-      {"text":"Какой ваш общий момент достоин сцены после титров романтической комедии?","audience":"couple"},
-      {"text":"Что вы впервые поняли друг о друге только спустя время?","audience":"couple"},
-      {"text":"Если бы отношениям выдали обновление, какую одну ошибку вы исправили бы?","audience":"couple"},
-      {"text":"Кто здесь лучше всех сумел бы уйти со свидания, не обидев человека?","audience":"party"},
-      {"text":"Кто из компании мог бы вести подкаст о провальных свиданиях?","audience":"party"},
-      {"text":"С кем из присутствующих ты бы сыграл в романтической комедии? Только по желанию называй имя.","audience":"party"},
-      {"text":"Если бы этот вечер стал сериалом, кто произнёс бы финальную драматичную реплику?","audience":"party"},
-      {"text":"Кого из компании ты бы попросил придумать тебе приличную, но дерзкую фразу для знакомства?","audience":"party"},
+      {"text":"Кто из вас чаще говорит «выбирай фильм ты», но потом спорит с выбором?"},
+      {"text":"На каком самом нелепом свидании вы могли бы отлично провести время вдвоём?"},
+      {"text":"Какой ваш общий момент достоин сцены после титров романтической комедии?"},
+      {"text":"Что вы впервые поняли друг о друге только спустя время?"},
+      {"text":"Если бы отношениям выдали обновление, какую одну ошибку вы исправили бы?"},
+      {"text":"Кто здесь лучше всех сумел бы уйти со свидания, не обидев человека?"},
+      {"text":"Кто из компании мог бы вести подкаст о провальных свиданиях?"},
+      {"text":"С кем из присутствующих ты бы сыграл в романтической комедии? Только по желанию называй имя."},
+      {"text":"Если бы этот вечер стал сериалом, кто произнёс бы финальную драматичную реплику?"},
+      {"text":"Кого из компании ты бы попросил придумать тебе приличную, но дерзкую фразу для знакомства?"},
     ],
   },
   action: {
@@ -506,8 +500,7 @@ const data = {
       "Сделай драматичный трейлер фильма «Я опять забыл пароль».",
       "Покажи три типа людей, когда официант принёс неправильный заказ.",
       "Произнеси оправдание за опоздание языком официального пресс-релиза.",
-    ],
-    spicy: [
+      // Дополнительные задания для уровня «Смело».
       "С разрешения выбранного игрока обними его на пять секунд; иначе сделай комплимент.",
       "Предложи соседу справа поцелуй в щёку — только если оба согласны; иначе воздушный поцелуй.",
       "С разрешения игрока напротив поцелуй его в руку; иначе поклонись как в романтическом фильме.",
@@ -548,26 +541,26 @@ const data = {
       "Сыграй сцену, где свидание испортил неожиданный звонок мамы.",
       "Спроси у партнёра разрешения на объятие самым галантным способом.",
       "Расскажи о пирожке так, будто это твоя первая любовь.",
-      {"text":"С согласия партнёра поцелуй его в щёку; вместо этого можно сказать нежный комплимент.","audience":"couple"},
-      {"text":"Обнимите друг друга на десять секунд, если обоим комфортно; иначе улыбнитесь друг другу.","audience":"couple"},
-      {"text":"С разрешения партнёра поцелуй его в руку; если нет — сделай галантный поклон.","audience":"couple"},
-      {"text":"Если оба хотят, потанцуйте вдвоём под воображаемую медленную песню; иначе исполните танец по отдельности.","audience":"couple"},
-      {"text":"Спроси партнёра, какое свидание он хотел бы повторить, и поделись своим вариантом.","audience":"couple"},
-      {"text":"С разрешения партнёра возьми его за руку и назови три приятных воспоминания.","audience":"couple"},
-      {"text":"Скажи партнёру, за что благодарен ему, не используя слова «красивый» и «милая».","audience":"couple"},
-      {"text":"Изобразите вместе неловкое первое свидание: каждый говорит по одной смешной реплике.","audience":"couple"},
-      {"text":"Если оба не против, обменяйтесь поцелуем в лоб; альтернатива — воздушный поцелуй.","audience":"couple"},
-      {"text":"Придумайте вместе название романтической комедии про вас двоих.","audience":"couple"},
-      {"text":"Если сосед слева согласен, обними его на пять секунд; если нет — сделай комплимент.","audience":"party"},
-      {"text":"Предложи любому согласному игроку поцелуй в щёку; альтернатива — эффектный воздушный поцелуй.","audience":"party"},
-      {"text":"Попроси разрешения обменяться с игроком напротив дружеским рукопожатием в стиле кино.","audience":"party"},
-      {"text":"Назови игрока, у которого сегодня самый загадочный взгляд, не ставя никого в неловкое положение.","audience":"party"},
-      {"text":"Устрой конкурс самого нелепого флирта с добровольным соперником; можно сыграть обе роли самому.","audience":"party"},
-      {"text":"Предложи любому игроку медленный танец — только если оба хотят; иначе танцуй один.","audience":"party"},
-      {"text":"По добровольному согласию обменяйтесь с соседом комплиментами в стиле плохой мелодрамы.","audience":"party"},
-      {"text":"Придумай смешную фразу для знакомства, которую никто в компании не решился бы использовать.","audience":"party"},
-      {"text":"Попроси согласного игрока сыграть вместе сцену свидания, на котором официант — инопланетянин.","audience":"party"},
-      {"text":"Сыграй сцену прощания с воображаемым бывшим так, чтобы все рассмеялись.","audience":"party"},
+      {"text":"С согласия партнёра поцелуй его в щёку; вместо этого можно сказать нежный комплимент."},
+      {"text":"Обнимите друг друга на десять секунд, если обоим комфортно; иначе улыбнитесь друг другу."},
+      {"text":"С разрешения партнёра поцелуй его в руку; если нет — сделай галантный поклон."},
+      {"text":"Если оба хотят, потанцуйте вдвоём под воображаемую медленную песню; иначе исполните танец по отдельности."},
+      {"text":"Спроси партнёра, какое свидание он хотел бы повторить, и поделись своим вариантом."},
+      {"text":"С разрешения партнёра возьми его за руку и назови три приятных воспоминания."},
+      {"text":"Скажи партнёру, за что благодарен ему, не используя слова «красивый» и «милая»."},
+      {"text":"Изобразите вместе неловкое первое свидание: каждый говорит по одной смешной реплике."},
+      {"text":"Если оба не против, обменяйтесь поцелуем в лоб; альтернатива — воздушный поцелуй."},
+      {"text":"Придумайте вместе название романтической комедии про вас двоих."},
+      {"text":"Если сосед слева согласен, обними его на пять секунд; если нет — сделай комплимент."},
+      {"text":"Предложи любому согласному игроку поцелуй в щёку; альтернатива — эффектный воздушный поцелуй."},
+      {"text":"Попроси разрешения обменяться с игроком напротив дружеским рукопожатием в стиле кино."},
+      {"text":"Назови игрока, у которого сегодня самый загадочный взгляд, не ставя никого в неловкое положение."},
+      {"text":"Устрой конкурс самого нелепого флирта с добровольным соперником; можно сыграть обе роли самому."},
+      {"text":"Предложи любому игроку медленный танец — только если оба хотят; иначе танцуй один."},
+      {"text":"По добровольному согласию обменяйтесь с соседом комплиментами в стиле плохой мелодрамы."},
+      {"text":"Придумай смешную фразу для знакомства, которую никто в компании не решился бы использовать."},
+      {"text":"Попроси согласного игрока сыграть вместе сцену свидания, на котором официант — инопланетянин."},
+      {"text":"Сыграй сцену прощания с воображаемым бывшим так, чтобы все рассмеялись."},
     ],
   },
   dare: {
@@ -659,8 +652,7 @@ const data = {
       {"text":"📜 Закончи пословицу: «Один в поле не…»","answer":"воин."},
       {"text":"📜 Закончи пословицу: «У семи нянек дитя без…»","answer":"глазу."},
       {"text":"📜 Закончи пословицу: «С кем поведёшься, от того и…»","answer":"наберёшься."},
-    ],
-    spicy: [
+      // Дополнительные задания для уровня «Смело».
       "Назови пять признаков взаимного флирта за пятнадцать секунд.",
       "Придумай три дерзких, но уважительных приглашения на свидание.",
       "Сыграй сцену признания, которое началось с абсолютно нелепой фразы.",
@@ -740,8 +732,7 @@ const data = {
       "Какое неловкое знакомство закончилось неожиданной дружбой?",
       "Когда ты в последний раз преувеличивал свою занятость?",
       "Какое старое прозвище ты попросил бы друзей никогда не вспоминать?",
-    ],
-    spicy: [
+      // Дополнительные задания для уровня «Смело».
       "Какой самый неожиданный человек когда-то вызывал у тебя сильное влечение?",
       "Ты когда-нибудь мечтал о поцелуе после случайной встречи?",
       "Есть ли у тебя невинная романтическая фантазия, о которой никто не знает?",
@@ -852,8 +843,7 @@ const data = {
       {"text":"📜 Закончи пословицу: «Не всё то золото, что…»","answer":"блестит."},
       {"text":"📜 Закончи пословицу: «В гостях хорошо, а дома…»","answer":"лучше."},
       {"text":"📜 Закончи пословицу: «Язык мой — враг…»","answer":"мой."},
-    ],
-    spicy: [
+      // Дополнительные задания для уровня «Смело».
       "Защити в суде свидание, на котором оба забыли имена друг друга.",
       "Придумай три абсурдных правила для секретного клуба романтиков.",
       "Опиши идеальный флирт как инструкцию по сборке мебели.",
@@ -909,8 +899,7 @@ const data = {
       {"text":"Назови человека, с которым приятно быть в одной команде: вам обоим по 2 ★.","effect":"partner","points":2},
       {"text":"Пожелай соперникам удачи — получи 1 ★.","effect":"self","points":1},
       {"text":"Выбери игрока, который получит 1 ★ за просто так.","effect":"choose","points":1},
-    ],
-    spicy: [
+      // Дополнительные задания для уровня «Смело».
       {"text":"💞 Придумай дерзкий, но уважительный комплимент и получи 2 ★.","effect":"self","points":2},
       {"text":"💞 Расскажи о нелепом флирте из кино и получи 3 ★.","effect":"self","points":3},
       {"text":"💞 Назови главную романтическую ошибку комедий и получи 2 ★.","effect":"self","points":2},
@@ -922,7 +911,7 @@ const data = {
 };
 
 const state = {
-  players:[],rounds:10,turn:0,taken:0,max:0,enabled:[],level:"bold",adultMode:"mixed",
+  players:[],rounds:10,turn:0,taken:0,max:0,enabled:[],level:"bold",
   used:{},category:null,task:null,angle:0,spinning:false,active:false,started:false,
   spinToken:0,spinTimeout:null,timerId:null,deadline:0,motion:true,sound:true
 };
@@ -946,7 +935,6 @@ function refreshSettings() {
   $("#soundToggle").setAttribute("aria-pressed",String(state.sound));
   $("#motionToggle").textContent = state.motion ? "✨ Эффекты: вкл." : "✨ Эффекты: выкл.";
   $("#motionToggle").setAttribute("aria-pressed",String(state.motion));
-  $("#adultModeField").classList.toggle("hidden",$('input[name="level"]:checked').value !== "spicy");
 }
 function note(message) {
   const el = $("#toast");
@@ -1049,24 +1037,17 @@ function buildWheel() {
     label.style.setProperty("--a",`${i*60}deg`);label.textContent=`${data[key].emoji} ${data[key].name}`;
     wheel.append(label);});
 }
-function levelsForPlay() {return state.level==="soft"?["soft"]:state.level==="bold"?["soft","bold"]:["soft","bold","spicy"];}
-function taskEligible(task){
-  if(typeof task==="string")return true;
-  return !task.audience || task.audience===state.adultMode || (state.adultMode==="mixed" && task.audience==="party");
+function taskPool(key){
+  return state.level==="soft"
+    ? data[key].soft
+    : [...data[key].soft,...data[key].bold];
 }
-function taskPool(key){return levelsForPlay().flatMap(level=>data[key][level]).filter(taskEligible);}
 function signature(task){return typeof task==="string"?task:task.text;}
 function chooseTask(key){
   const pool=taskPool(key),used=state.used[key]??new Set();
   let left=pool.filter(item=>!used.has(signature(item)));
   if(!left.length){used.clear();left=pool.slice();}
   if(!left.length)throw new Error("Нет заданий в категории "+key);
-  // В режиме 18+ чаще выдаём именно взрослые задания, а не общие.
-  const adult=new Set(data[key].spicy.map(signature));
-  if(state.level==="spicy" && random(100)<75){
-    const mature=left.filter(item=>adult.has(signature(item)));
-    if(mature.length)left=mature;
-  }
   const task=left[random(left.length)];used.add(signature(task));state.used[key]=used;return task;
 }
 function remainingCount(){return state.enabled.reduce((n,key)=>n+taskPool(key).filter(t=>!state.used[key]?.has(signature(t))).length,0);}
@@ -1094,11 +1075,10 @@ function startGame(){
   const enabled=$$("#categoryChoices input:checked").map(x=>x.value);
   if(!enabled.length){note("Выберите хотя бы одну категорию");return;}
   const level=$('input[name="level"]:checked').value;
-  if(level==="spicy"&&!confirm("18+: все участники совершеннолетние? Все согласны на откровенные темы и право отказаться от любого задания без штрафа?"))return;
   stopAsync();
   state.players=names.map((name,i)=>({name,avatar:avatars[i],score:0,turns:0}));
   state.rounds=Number($("#rounds").value);state.turn=0;state.taken=0;state.max=names.length*state.rounds;
-  state.enabled=enabled;state.level=level;state.adultMode=$("#adultMode").value;
+  state.enabled=enabled;state.level=level;
   state.used={};state.category=null;state.task=null;state.angle=0;state.started=true;
   const wheel=$("#wheel");wheel.style.transition="none";wheel.style.transform="rotate(0deg)";
   void wheel.offsetWidth;wheel.style.transition="";
@@ -1192,9 +1172,8 @@ function backToSetup(){stopAsync();state.started=false;
   window.scrollTo({top:0,behavior:canAnimate()?"smooth":"instant"});
 }
 function showBankInfo(){
-  const total=order.reduce((n,key)=>n+["soft","bold","spicy"].reduce((sum,l)=>sum+data[key][l].length,0),0);
-  const adult=order.reduce((n,key)=>n+data[key].spicy.length,0);
-  $("#bankInfo").textContent=`🎲 ${total.toLocaleString("ru-RU")} заданий • ${adult.toLocaleString("ru-RU")} в режиме 18+`;
+  const total=order.reduce((n,key)=>n+data[key].soft.length+data[key].bold.length,0);
+  $("#bankInfo").textContent=`🎲 ${total.toLocaleString("ru-RU")} заданий • два уровня сложности`;
 }
 $("#addPlayer").addEventListener("click",()=>{const names=$$("#playerInputs input").map(x=>x.value);if(names.length>=10)return;renderInputs([...names,""]);$$("#playerInputs input").at(-1).focus();});
 $("#start").addEventListener("click",startGame);
